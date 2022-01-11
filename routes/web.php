@@ -30,6 +30,7 @@ Route::prefix('auth')->group(function (){
 Route::group(['middleware' => ['auth']], function () {
     Route::get('dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');
     Route::resource('pengaturan/tarif-berlaku', 'App\Http\Controllers\Pengaturan\TarifBerlakuController');
+    Route::resource('pengaturan/tarif-flat', 'App\Http\Controllers\Pengaturan\TarifFlatController');
 });
 
 Route::prefix('starter-kit')->group(function () {

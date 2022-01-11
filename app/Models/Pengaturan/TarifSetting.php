@@ -12,5 +12,4 @@ class TarifSetting extends Model
     
     protected $connection = 'db_parkir';
     protected $table = "tarif_setting";
-    public $timestamps = false;
 }
