@@ -1,7 +1,7 @@
-<div class="container-fluid">
-    <div class="page-header">
+<div class="container-fluid ">
+    <div class="page-header pb-2">
       <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
           {{ $breadcrumb_title ?? '' }}
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>

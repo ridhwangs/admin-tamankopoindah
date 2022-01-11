@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Pengaturan;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Pengaturan\TarifSetting;
 
@@ -16,10 +17,7 @@ class TarifBerlakuController extends Controller
      */
     public function index()
     {
-        $data = [
-            'tarif_setting' => TarifSetting::first(), 
-        ];
-        return view('pengaturan.tarif_berlaku', $data);
+       
     }
 
     /**
@@ -51,7 +49,10 @@ class TarifBerlakuController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = [
+            'tarif_setting' => TarifSetting::where('api_key', $id)->first(), 
+        ];
+        return view('pengaturan.tarif_berlaku', $data);
     }
 
     /**
@@ -62,7 +63,7 @@ class TarifBerlakuController extends Controller
      */
     public function edit($id)
     {
-        //
+        
     }
 
     /**
@@ -74,7 +75,17 @@ class TarifBerlakuController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = [
+            'tarif_berlaku' => $request->tarif_berlaku,
+            'created_by' => Auth::user()->email,
+        ];
+        TarifSetting::where('api_key', $id)->update($data);
+        
+        $response = [
+            'message' => 'Tarif berlaku menjadi '. $request->tarif_berlaku,
+            'type' => 'success'
+        ];
+        return response()->json($response);
     }
 
     /**

@@ -5,20 +5,11 @@ namespace App\Models\Pengaturan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TarifFlat extends Model
+class TarifMember extends Model
 {
     use HasFactory;
     protected $connection = 'db_parkir';
-    protected $table = "tarif_flat";
-
-    protected $fillable = [
-        'id',
-        'kendaraan_id',
-        'nama_kendaraan',
-        'kategori',
-        'created_by',
-        'created_at',
-    ];
+    protected $table = "tarif_member";
 
     public function kendaraan()
     {

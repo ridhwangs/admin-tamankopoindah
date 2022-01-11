@@ -5,6 +5,7 @@
 @endsection
 
 @push('css')
+<link rel="stylesheet" type="text/css" href="{{asset('assets/css/sweetalert2.css')}}">
 @endpush
 
 @section('content')
@@ -40,36 +41,51 @@
                   </div>
                 </div>
               </div>
+              <div class="card-footer p-2">
+                <label id="info-update">Last Update : <code>{{ $tarif_setting->updated_at; }}</code> by <code>{{ $tarif_setting->created_by }}</code></label>
+              </div>
             </div>
           </div>
         </div>
       </div>
 	@push('scripts')
+  
     <script src="{{ asset('assets/js/bootstrap/popper.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap/bootstrap.min.js') }}"></script>
-    <script>
-      @if($tarif_setting->tarif_berlaku == 'flat')
-        $('#flat').prop('checked', true);
-      @elseif($tarif_setting->tarif_berlaku == 'progressive')
-        $('#progressive').prop('checked', true);
-      @endif
+    <script src="{{asset('assets/js/sweet-alert/sweetalert.min.js')}}"></script>
 
-      function toggleSwitch(tarif) {
-        $('.checkbox').prop('checked', false);
-        document.getElementById(tarif).checked = true;
-        $.ajax({
-            url: '',
-            type: 'PUT',
-            dataType: 'json',
-            data: {tarif_setting:tarif},
-        })
-        .done(function(data) {
-            console.log(data.message);
-        })
-        .fail(function(data) {
-            console.log(data);
-        })
-      }
+    <script>
+      
+       $(document).ready(function() {
+            @if($tarif_setting->tarif_berlaku == 'flat')
+              $('#flat').prop('checked', true);
+            @elseif($tarif_setting->tarif_berlaku == 'progressive')
+              $('#progressive').prop('checked', true);
+            @endif
+       });
+                
+            function toggleSwitch(tarif) {
+              var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+              $('.checkbox').prop('checked', false);
+              document.getElementById(tarif).checked = true;
+              
+              $.ajax({
+                  url: '{{ route('tarif-berlaku.update', $tarif_setting->api_key) }}',
+                  type: 'PUT',
+                  cache: false,
+                  data: {_token : CSRF_TOKEN, tarif_berlaku:tarif},
+              })
+              .done(function(data) {
+                  console.log(data.message);
+                  swal("", data.message, data.type);
+                  $('#info-update').load(location.href+(' #info-update'));
+              })
+              .fail(function() {
+                  console.log("error");
+              })
+            }
+  
+   
     </script>
 	@endpush
 

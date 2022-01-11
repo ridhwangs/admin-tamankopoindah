@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 
-@section('title')Pengaturan Tarif Flat
+@section('title')Pengaturan Tarif Progressive
  {{ $title }}
 @endsection
 
@@ -10,9 +10,9 @@
 @section('content')
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
-			<h3>Pengaturan Flat</h3>
+			<h3>Pengaturan Progressive</h3>
 		@endslot
-		<li class="breadcrumb-item">Tarif Flat </li>
+		<li class="breadcrumb-item">Tarif Progressive </li>
 	@endcomponent
    
     <div class="container-fluid">
@@ -36,11 +36,15 @@
                         <th>No</th>
                         <th>Kategori</th>
                         <th>Nama Kendaraan</th>
-                        <th>Tarif</th>
+                        <th>Tarif-1</th>
+                        <th>Tarif-2</th>
+                        <th>Tarif-3</th>
+                        <th>Tarif-4</th>
+                        <th>Tarif-5</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <form id="form-batch" method="POST" action="{{ route('tarif-flat.update', $api_key) }}">
+                      <form id="form-batch" method="POST" action="{{ route('tarif-progressive.update', $api_key) }}">
                         @method('PUT')
                         @csrf
 
@@ -48,7 +52,7 @@
                           $last_update = "";
                           $user_by = "";
                         @endphp
-                        @foreach($tarif_flat AS $key => $rows)
+                        @foreach($tarif_progressive AS $key => $rows)
                         @php
                           $last_update = $rows->updated_at;
                           $user_by = $rows->created_by;
@@ -58,7 +62,19 @@
                             <td>{{ $rows->kendaraan->kategori }}</td>
                             <td>{{ $rows->kendaraan->nama_kendaraan }}</td>
                             <td>
-                              <input type="text" class="form-control form-control-sm text-end" name="tarif[{{ $key }}]" value="{{ $rows->tarif }}">
+                              <input type="text" class="form-control form-control-sm text-end" name="tarif_1[{{ $key }}]" value="{{ $rows->tarif_1 }}">
+                            </td>
+                            <td>
+                              <input type="text" class="form-control form-control-sm text-end" name="tarif_2[{{ $key }}]" value="{{ $rows->tarif_2 }}">
+                            </td>
+                            <td>
+                              <input type="text" class="form-control form-control-sm text-end" name="tarif_3[{{ $key }}]" value="{{ $rows->tarif_3 }}">
+                            </td>
+                            <td>
+                              <input type="text" class="form-control form-control-sm text-end" name="tarif_4[{{ $key }}]" value="{{ $rows->tarif_4 }}">
+                            </td>
+                            <td>
+                              <input type="text" class="form-control form-control-sm text-end" name="tarif_5[{{ $key }}]" value="{{ $rows->tarif_5 }}">
                             </td>
                           </tr>
                         @endforeach

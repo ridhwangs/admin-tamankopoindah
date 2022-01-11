@@ -6,9 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-use App\Models\Pengaturan\TarifFlat;
-
-class TarifFlatController extends Controller
+use App\Models\Pengaturan\TarifMember;
+class TarifMemberController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +16,10 @@ class TarifFlatController extends Controller
      */
     public function index()
     {
-        
+        $data = [
+            'tarif_member' => TarifMember::with('kendaraan')->get(),
+        ];
+        return view('pengaturan.tarif_member', $data);
     }
 
     /**
@@ -49,11 +51,7 @@ class TarifFlatController extends Controller
      */
     public function show($id)
     {
-        $data = [
-            'tarif_flat' => TarifFlat::where('api_key', $id)->with('kendaraan')->get(),
-            'api_key' => $id, 
-        ];
-        return view('pengaturan.tarif_flat', $data);
+        //
     }
 
     /**
@@ -64,7 +62,7 @@ class TarifFlatController extends Controller
      */
     public function edit($id)
     {
-        
+        //
     }
 
     /**
@@ -74,17 +72,17 @@ class TarifFlatController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $api_key)
+    public function update(Request $request, $null)
     {
         $id = $request->id;
-        $tarif = $request->tarif;
+        $jumlah = $request->jumlah;
 
         foreach ($id as $key => $value) {
             $data = [
-                'tarif' => $tarif[$key],
+                'jumlah' => $jumlah[$key],
                 'created_by' => Auth::user()->email,
             ];
-            TarifFlat::where('id', $id[$key])->update($data);
+            TarifMember::where('id', $id[$key])->update($data);
         }
 
         return redirect()->back()->with('message', 'Semua data berhasil disimpan!');

@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 
-@section('title')Pengaturan Tarif Flat
+@section('title')Pengaturan Tarif Member
  {{ $title }}
 @endsection
 
@@ -10,9 +10,9 @@
 @section('content')
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
-			<h3>Pengaturan Flat</h3>
+			<h3>Pengaturan Member</h3>
 		@endslot
-		<li class="breadcrumb-item">Tarif Flat </li>
+		<li class="breadcrumb-item">Tarif Member </li>
 	@endcomponent
    
     <div class="container-fluid">
@@ -40,7 +40,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <form id="form-batch" method="POST" action="{{ route('tarif-flat.update', $api_key) }}">
+                      <form id="form-batch" method="POST" action="{{ route('tarif-member.update','1') }}">
                         @method('PUT')
                         @csrf
 
@@ -48,7 +48,7 @@
                           $last_update = "";
                           $user_by = "";
                         @endphp
-                        @foreach($tarif_flat AS $key => $rows)
+                        @foreach($tarif_member AS $key => $rows)
                         @php
                           $last_update = $rows->updated_at;
                           $user_by = $rows->created_by;
@@ -58,7 +58,7 @@
                             <td>{{ $rows->kendaraan->kategori }}</td>
                             <td>{{ $rows->kendaraan->nama_kendaraan }}</td>
                             <td>
-                              <input type="text" class="form-control form-control-sm text-end" name="tarif[{{ $key }}]" value="{{ $rows->tarif }}">
+                              <input type="text" class="form-control form-control-sm text-end" name="jumlah[{{ $key }}]" value="{{ $rows->jumlah }}">
                             </td>
                           </tr>
                         @endforeach
