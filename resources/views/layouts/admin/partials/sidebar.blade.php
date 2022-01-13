@@ -10,6 +10,9 @@
                         <a class="nav-link " href="{{ route('dashboard') }}"><i data-feather="home"></i><span>Dashboard</span></a>
                     </li>
                     <li class="dropdown">
+                        <a class="nav-link  {{ in_array(Route::currentRouteName(), ['index','operator']) ? 'active' : '' }} " href="{{ route('operator.index') }}"><i data-feather="users"></i><span>Operator</span></a>
+                    </li>
+                    <li class="dropdown">
                         <a class="nav-link menu-title {{ prefixActive('/pengaturan') }}" href="javascript:void(0)"><i data-feather="anchor"></i><span>Pengaturan</span></a>
                         <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/pengaturan') }};">
                             

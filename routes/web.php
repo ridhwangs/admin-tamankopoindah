@@ -33,6 +33,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('pengaturan/tarif-flat', 'App\Http\Controllers\Pengaturan\TarifFlatController');
     Route::resource('pengaturan/tarif-progressive', 'App\Http\Controllers\Pengaturan\TarifProgressiveController');
     Route::resource('pengaturan/tarif-member', 'App\Http\Controllers\Pengaturan\TarifMemberController');
+    Route::resource('operator', 'App\Http\Controllers\OperatorController');
 });
 
 Route::prefix('starter-kit')->group(function () {
