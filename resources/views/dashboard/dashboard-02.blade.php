@@ -11,32 +11,127 @@
 @endpush
     @section('content')
     
-    <div class="container-fluid">
+    <div class="container-fluid general-widget mb-5">
         <div class="row">
-            <div class="col-xl-6 box-col-12 des-xl-100 invoice-sec">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="header-top d-sm-flex justify-content-between align-items-center">
-                            <h5>Parkir hari ini.</h5>
-                            <div class="center-content">
-                                <p class="d-sm-flex align-items-center"><span class="m-r-10">$5,56548k</span><i class="toprightarrow-primary fa fa-arrow-up m-r-10"></i>94% More Than Last Year</p>
-                            </div>
-                            <div class="setting-list">
-                                <ul class="list-unstyled setting-option">
-                                    <!-- <li>
-                                        <div class="setting-primary"><i class="icon-settings"></i></div>
-                                    </li> -->
-                                    <li><i class="icofont icofont-refresh reload-card font-primary"></i></li>
-                                </ul>
+            <div class="col-sm-6 col-xl-3 col-lg-6">
+                <div class="card o-hidden border-0">
+                    <div class="bg-primary b-r-4 card-body">
+                        <div class="media static-top-widget">
+                            <div class="align-self-center text-center"><i data-feather="arrow-up"></i></div>
+                            <div class="media-body">
+                                <span class="m-0">Tiket Tercetak</span>
+                                <h4 class="mb-0 counter">{{ $tiket_tercetak }}</h4>
+                                <small>Hari ini: <span class="counter">{{ $tiket_tercetak_today }}</span></small>
+                             
+                                <i class="icon-bg" data-feather="arrow-up"></i>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body p-0">
-                        <div id="timeline-chart"></div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-3 col-lg-6">
+                <div class="card o-hidden border-0">
+                    <div class="bg-warning b-r-4 card-body">
+                        <div class="media static-top-widget">
+                            <div class="align-self-center text-center"><i data-feather="arrow-down"></i></div>
+                            <div class="media-body">
+                                <span class="m-0">Tiket Keluar</span>
+                                <h4 class="mb-0 counter">{{ $tiket_keluar }}</h4>
+                                <small>Hari ini: <span class="counter">{{ $tiket_keluar_today }}</span></small>
+                                <i class="icon-bg" data-feather="arrow-down"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-6 box-col-12 des-xl-100 top-dealer-sec">
+            <div class="col-sm-6 col-xl-3 col-lg-6">
+                <div class="card o-hidden border-0">
+                    <div class="bg-secondary b-r-4 card-body">
+                        <div class="media static-top-widget">
+                            <div class="align-self-center text-center"><i data-feather="archive"></i></div>
+                            <div class="media-body">
+                                <span class="m-0">Tiket Sisa</span>
+                                <h4 class="mb-0 counter">{{ $tiket_tercetak - $tiket_keluar }}</h4>
+                                <small>Hari ini: <span class="counter">{{ $tiket_tercetak_today - $tiket_keluar_today }}</span></small>
+                                <i class="icon-bg" data-feather="archive"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-3 col-lg-6">
+                <div class="card o-hidden border-0">
+                    <div class="bg-danger b-r-4 card-body">
+                        <div class="media static-top-widget">
+                            <div class="align-self-center text-center"><i data-feather="alert-octagon"></i></div>
+                            <div class="media-body">
+                                <span class="m-0">Tiket Expired</span>
+                                <h4 class="mb-0 counter">{{ $tiket_expired }}</h4>
+                                <small>Hari ini: <span class="counter">{{ $tiket_expired_today }}</span></small>
+                                <i class="icon-bg" data-feather="alert-octagon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-6 xl-100 box-col-12">
+                <div class="widget-joins card widget-arrow">
+                    <div class="row">
+                        <div class="col-sm-6 pe-0">
+                            <div class="media border-after-xs">
+                                <div class="align-self-center me-3 text-start">
+                                    <span class="widget-t mb-1">Pendapatan</span>
+                                    <h5 class="mb-0">Hari ini</h5>
+                                </div>
+                                <div class="media-body align-self-center"></div>
+                                <div class="media-body">
+                                    <h5 class="mb-0">Rp.<span class="counter">{{ number_format($hari_ini) }}</span></h5>
+                                 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 ps-0">
+                            <div class="media">
+                                <div class="align-self-center me-3 text-start">
+                                    <span class="widget-t mb-1">Pendapatan</span>
+                                    <h5 class="mb-0">Minggu ini</h5>
+                                </div>
+                                <div class="media-body align-self-center"></div>
+                                <div class="media-body ps-2">
+                                    <h5 class="mb-0">Rp.<span class="counter">{{ number_format($minggu_ini) }}</span></h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 pe-0">
+                            <div class="media border-after-xs">
+                                <div class="align-self-center me-3 text-start">
+                                    <span class="widget-t mb-1">Pendapatan</span>
+                                    <h5 class="mb-0">Bulan ini</h5>
+                                </div>
+                                <div class="media-body align-self-center"></div>
+                                <div class="media-body">
+                                    <h5 class="mb-0">Rp.<span class="counter">{{ number_format($bulan_ini) }}</span></h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 ps-0">
+                            <div class="media">
+                                <div class="align-self-center me-3 text-start">
+                                    <span class="widget-t mb-1">Pendapatan</span>
+                                    <h5 class="mb-0">Tahun ini</h5>
+                                </div>
+                                <div class="media-body align-self-center ps-3"></div>
+                                <div class="media-body ps-2">
+                                    <h5 class="mb-0">Rp.<span class="counter">{{ number_format($tahun_ini) }}</span></h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-12 box-col-12 des-xl-100 top-dealer-sec">
                 <div class="card">
                     <div class="card-header pb-0">
                         <div class="header-top d-sm-flex justify-content-between align-items-center">
@@ -51,59 +146,32 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-xs">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Operator</th>
-                                        <th>Shift</th>
-                                        <th>Keterangan</th>
-                                        <th>Waktu</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($log AS $key => $rows)
+                            <table class="table table-bordernone">
+                                    <thead>
                                         <tr>
-                                            <td>{{ $key+1 }}</td>
-                                            <td>{{ $rows->operator->nama }}</td>
-                                            <td>{{ $rows->shift->nama_shift }}</td>
-                                            <td>{{ $rows->keterangan }}</td>
-                                            <td>{{ $rows->created_at }}</td>
+                                            <th scope="col">Operator</th>
+                                            <th scope="col">Shift</th>
+                                            <th scope="col">Keterangan</th>
+                                            <th scope="col">Waktu</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-12 des-xl-50 yearly-growth-sec">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="header-top d-sm-flex justify-content-between align-items-center">
-                            <h5>Yearly growth</h5>
-                            <div class="center-content">
-                                <p class="d-sm-flex align-items-center"><span class="m-r-10"><i class="toprightarrow-primary fa fa-arrow-up m-r-10"></i>$9657.55k </span>86% more then last year</p>
-                            </div>
-                            <div class="setting-list">
-                                <ul class="list-unstyled setting-option">
-                                    <li>
-                                        <div class="setting-primary"><i class="icon-settings"></i></div>
-                                    </li>
-                                    <li><i class="view-html fa fa-code font-primary"></i></li>
-                                    <li><i class="icofont icofont-maximize full-card font-primary"></i></li>
-                                    <li><i class="icofont icofont-minus minimize-card font-primary"></i></li>
-                                    <li><i class="icofont icofont-refresh reload-card font-primary"></i></li>
-                                    <li><i class="icofont icofont-error close-card font-primary"></i></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body p-0 chart-block">
-                        <div id="chart-yearly-growth-dash-2"></div>
-                        <div class="code-box-copy">
-                            <button class="code-box-copy__btn btn-clipboard" data-clipboard-target="#yearly-growth" title="Copy"><i class="icofont icofont-copy-alt"></i></button>
-                            
+                                    </thead>
+                                    <tbody>
+                                         @foreach($log AS $key => $rows)
+                                            <tr>
+                                                <td class="bd-t-none u-s-tb">
+                                                    <div class="align-middle image-sm-size">
+                                                        <div class="d-inline-block">
+                                                            <h6>{{ $rows->operator->nama }}</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>{{ $rows->shift->nama_shift }}</td>
+                                                <td>{{ $rows->keterangan }}</td>
+                                                <td>{{ $rows->created_at }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                         </div>
                     </div>
                 </div>
