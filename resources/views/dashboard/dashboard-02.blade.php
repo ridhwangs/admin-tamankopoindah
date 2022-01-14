@@ -75,7 +75,7 @@
                 </div>
             </div>
             
-            <div class="col-xl-6 xl-100 box-col-12">
+            <div class="col-xl-12 xl-100 box-col-12">
                 <div class="widget-joins card widget-arrow">
                     <div class="row">
                         <div class="col-sm-6 pe-0">
@@ -87,7 +87,6 @@
                                 <div class="media-body align-self-center"></div>
                                 <div class="media-body">
                                     <h5 class="mb-0">Rp.<span class="counter">{{ number_format($hari_ini) }}</span></h5>
-                                 
                                 </div>
                             </div>
                         </div>
