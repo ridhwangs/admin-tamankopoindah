@@ -17,18 +17,14 @@ class DashboardController extends Controller
         $data = [
             'log' => Log_operator::with('operator','shift')->whereDate('created_at', Carbon::today())->orderBy('created_at','DESC')->get(),
             
-            'tiket_tercetak' => Parkir::count(),
-            'tiket_keluar' => Parkir::where('status','keluar')->count(),
-            'tiket_expired' => Parkir::where('status','expired')->count(),
-
-            'tiket_tercetak_today' => Parkir::whereDate('created_at', Carbon::today())->count(),
-            'tiket_keluar_today' => Parkir::whereDate('created_at', Carbon::today())->where('status','keluar')->count(),
-            'tiket_expired_today' => Parkir::whereDate('created_at', Carbon::today())->where('status','expired')->count(),
-
-            'hari_ini' => Parkir::whereDate('created_at', Carbon::today())->sum('tarif'),
-            'minggu_ini' => Parkir::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->sum('tarif'),
-            'bulan_ini' => Parkir::whereMonth('created_at', Carbon::today()->month)->sum('tarif'),
-            'tahun_ini' => Parkir::whereYear('created_at', Carbon::today()->year)->sum('tarif'),
+            'tiket_tercetak_detail' => Parkir::selectRaw('COUNT(*) AS qty_cetak, kategori')->groupBy('kategori')->whereDate('created_at', Carbon::today())->get(),
+            'tiket_keluar_detail' => Parkir::selectRaw('COUNT(*) AS qty_cetak, kategori')->groupBy('kategori')->where('status','keluar')->whereDate('created_at', Carbon::today())->get(),
+            'tiket_expired' => Parkir::selectRaw('COUNT(*) AS qty_cetak, kategori')->groupBy('kategori')->where('status','expired')->whereDate('created_at', Carbon::today())->get(),
+           
+            'hari_ini' => Parkir::with('kendaraan')->selectRaw('SUM(tarif) AS sum, kendaraan_id')->groupBy('kendaraan_id')->whereDate('created_at', Carbon::today())->get(),
+            'minggu_ini' => Parkir::with('kendaraan')->selectRaw('SUM(tarif) AS sum, kendaraan_id')->groupBy('kendaraan_id')->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get(),
+            'bulan_ini' => Parkir::with('kendaraan')->selectRaw('SUM(tarif) AS sum, kendaraan_id')->groupBy('kendaraan_id')->whereMonth('created_at', Carbon::today()->month)->get(),
+            'tahun_ini' =>  Parkir::with('kendaraan')->selectRaw('SUM(tarif) AS sum, kendaraan_id')->groupBy('kendaraan_id')->whereYear('created_at', Carbon::today()->year)->get(),
         ];
         return view('dashboard.dashboard-02', $data);
     }
