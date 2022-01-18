@@ -20,8 +20,8 @@
                             <div class="align-self-center text-center"><i data-feather="arrow-up"></i></div>
                             <div class="media-body">
                                 <span class="m-0">Tiket Tercetak</span>
-                                <h4 class="mb-0 counter">{{ $tiket_tercetak }}</h4>
-                                <small>Hari ini: <span class="counter">{{ $tiket_tercetak_today }}</span></small>
+                                <h4 class="mb-0 ">{{ $tiket_tercetak }}</h4>
+                                <small>Hari ini: <span class="">{{ $tiket_tercetak_today }}</span></small>
                              
                                 <i class="icon-bg" data-feather="arrow-up"></i>
                             </div>
@@ -36,8 +36,8 @@
                             <div class="align-self-center text-center"><i data-feather="arrow-down"></i></div>
                             <div class="media-body">
                                 <span class="m-0">Tiket Keluar</span>
-                                <h4 class="mb-0 counter">{{ $tiket_keluar }}</h4>
-                                <small>Hari ini: <span class="counter">{{ $tiket_keluar_today }}</span></small>
+                                <h4 class="mb-0 ">{{ $tiket_keluar }}</h4>
+                                <small>Hari ini: <span class="">{{ $tiket_keluar_today }}</span></small>
                                 <i class="icon-bg" data-feather="arrow-down"></i>
                             </div>
                         </div>
@@ -51,8 +51,8 @@
                             <div class="align-self-center text-center"><i data-feather="archive"></i></div>
                             <div class="media-body">
                                 <span class="m-0">Tiket Sisa</span>
-                                <h4 class="mb-0 counter">{{ $tiket_tercetak - $tiket_keluar }}</h4>
-                                <small>Hari ini: <span class="counter">{{ $tiket_tercetak_today - $tiket_keluar_today }}</span></small>
+                                <h4 class="mb-0 ">{{ $tiket_tercetak - $tiket_keluar }}</h4>
+                                <small>Hari ini: <span class="">{{ $tiket_tercetak_today - $tiket_keluar_today }}</span></small>
                                 <i class="icon-bg" data-feather="archive"></i>
                             </div>
                         </div>
@@ -66,8 +66,8 @@
                             <div class="align-self-center text-center"><i data-feather="alert-octagon"></i></div>
                             <div class="media-body">
                                 <span class="m-0">Tiket Expired</span>
-                                <h4 class="mb-0 counter">{{ $tiket_expired }}</h4>
-                                <small>Hari ini: <span class="counter">{{ $tiket_expired_today }}</span></small>
+                                <h4 class="mb-0 ">{{ $tiket_expired }}</h4>
+                                <small>Hari ini: <span class="">{{ $tiket_expired_today }}</span></small>
                                 <i class="icon-bg" data-feather="alert-octagon"></i>
                             </div>
                         </div>
@@ -86,7 +86,15 @@
                                 </div>
                                 <div class="media-body align-self-center"></div>
                                 <div class="media-body">
-                                    <h5 class="mb-0">Rp.<span class="counter">{{ number_format($hari_ini) }}</span></h5>
+                                    <ul>
+                                        @php $sum_hari_ini = 0; @endphp
+                                        @foreach($hari_ini AS $key => $rows)
+                                        @php $sum_hari_ini += $rows->tarif @endphp
+                                            <li>{{ $rows->nama_kendaraan }} : {{ number_format($rows->tarif) }}</li>
+                                        @endforeach
+                                    </ul>
+                                    <h5 class="mb-0">Rp.<span class="">{{ number_format($sum_hari_ini) }}</span></h5>
+                                 
                                 </div>
                             </div>
                         </div>
@@ -98,7 +106,7 @@
                                 </div>
                                 <div class="media-body align-self-center"></div>
                                 <div class="media-body ps-2">
-                                    <h5 class="mb-0">Rp.<span class="counter">{{ number_format($minggu_ini) }}</span></h5>
+                                    <h5 class="mb-0">Rp.<span class="">{{ number_format($minggu_ini) }}</span></h5>
                                 </div>
                             </div>
                         </div>
@@ -110,7 +118,7 @@
                                 </div>
                                 <div class="media-body align-self-center"></div>
                                 <div class="media-body">
-                                    <h5 class="mb-0">Rp.<span class="counter">{{ number_format($bulan_ini) }}</span></h5>
+                                    <h5 class="mb-0">Rp.<span class="">{{ number_format($bulan_ini) }}</span></h5>
                                 </div>
                             </div>
                         </div>
@@ -122,7 +130,7 @@
                                 </div>
                                 <div class="media-body align-self-center ps-3"></div>
                                 <div class="media-body ps-2">
-                                    <h5 class="mb-0">Rp.<span class="counter">{{ number_format($tahun_ini) }}</span></h5>
+                                    <h5 class="mb-0">Rp.<span class="">{{ number_format($tahun_ini) }}</span></h5>
                                 </div>
                             </div>
                         </div>
@@ -187,9 +195,9 @@
         <script src="{{asset('assets/js/chart/apex-chart/stock-prices.js')}}"></script>
         <script src="{{asset('assets/js/prism/prism.min.js')}}"></script>
         <script src="{{asset('assets/js/clipboard/clipboard.min.js')}}"></script>
-        <script src="{{asset('assets/js/counter/jquery.waypoints.min.js')}}"></script>
-        <script src="{{asset('assets/js/counter/jquery.counterup.min.js')}}"></script>
-        <script src="{{asset('assets/js/counter/counter-custom.js')}}"></script>
+        <script src="{{asset('assets/js//jquery.waypoints.min.js')}}"></script>
+        <script src="{{asset('assets/js//jquery.up.min.js')}}"></script>
+        <script src="{{asset('assets/js//-custom.js')}}"></script>
         <script src="{{asset('assets/js/custom-card/custom-card.js')}}"></script>
         <script src="{{asset('assets/js/owlcarousel/owl.carousel.js')}}"></script>
         <script src="{{asset('assets/js/owlcarousel/owl-custom.js')}}"></script>
