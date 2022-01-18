@@ -1,3 +1,7 @@
+<?php 
+use Carbon\Carbon;
+use App\Models\Parkir;
+?>
 @extends('layouts.admin.master')
 
 @section('title')Dashboard {{ $title }}
@@ -20,8 +24,19 @@
                             <div class="align-self-center text-center"><i data-feather="arrow-up"></i></div>
                             <div class="media-body">
                                 <span class="m-0">Tiket Tercetak</span>
-                                <h4 class="mb-0 ">{{ $tiket_tercetak }}</h4>
-                                <small>Hari ini: <span class="">{{ $tiket_tercetak_today }}</span></small>
+                                <h4 class="mb-0 non-counter" id="tiket_tercetak_all"></h4>
+                                <ul class="small">
+                                    @php
+                                        $tiket_tercetak_today = 0; 
+                                    @endphp
+                                    @foreach($tiket_tercetak_detail AS $key => $rows)
+                                        <li>{{ str_replace('_',' ',$rows->kategori) }}: {{ $rows->qty_cetak }}</li>
+                                        
+                                    @php
+                                        $tiket_tercetak_today += $rows->qty_cetak; 
+                                    @endphp
+                                    @endforeach
+                                </ul>
                              
                                 <i class="icon-bg" data-feather="arrow-up"></i>
                             </div>
@@ -36,8 +51,18 @@
                             <div class="align-self-center text-center"><i data-feather="arrow-down"></i></div>
                             <div class="media-body">
                                 <span class="m-0">Tiket Keluar</span>
-                                <h4 class="mb-0 ">{{ $tiket_keluar }}</h4>
-                                <small>Hari ini: <span class="">{{ $tiket_keluar_today }}</span></small>
+                                <h4 class="mb-0 non-counter" id="tiket_keluar_all"></h4>
+                                <ul class="small">
+                                    @php
+                                        $tiket_keluar_today = 0; 
+                                    @endphp
+                                    @foreach($tiket_keluar_detail AS $key => $rows)
+                                        <li>{{ str_replace('_',' ',$rows->kategori) }}: {{ $rows->qty_cetak }}</li>
+                                    @php
+                                        $tiket_keluar_today += $rows->qty_cetak; 
+                                    @endphp
+                                    @endforeach
+                                </ul>
                                 <i class="icon-bg" data-feather="arrow-down"></i>
                             </div>
                         </div>
@@ -51,9 +76,16 @@
                             <div class="align-self-center text-center"><i data-feather="archive"></i></div>
                             <div class="media-body">
                                 <span class="m-0">Tiket Sisa</span>
-                                <h4 class="mb-0 ">{{ $tiket_tercetak - $tiket_keluar }}</h4>
-                                <small>Hari ini: <span class="">{{ $tiket_tercetak_today - $tiket_keluar_today }}</span></small>
-                                <i class="icon-bg" data-feather="archive"></i>
+                                <h4 class="mb-0 non-counter">{{ $tiket_tercetak_today - $tiket_keluar_today }}</h4>
+                                <ul class="small">
+                               
+                                    @foreach($tiket_tercetak_detail AS $key => $rows)
+                                        @php
+                                            $tiket_keluar = Parkir::selectRaw('COUNT(*) AS qty_cetak, kategori')->groupBy('kategori')->where(['kategori' => $rows->kategori, 'status' => 'keluar'])->whereDate('created_at', Carbon::today())->first();
+                                        @endphp
+                                        <li>{{ str_replace('_',' ',$rows->kategori) }}: {{ $rows->qty_cetak - $tiket_keluar->qty_cetak }}</li>
+                                    @endforeach
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -66,8 +98,18 @@
                             <div class="align-self-center text-center"><i data-feather="alert-octagon"></i></div>
                             <div class="media-body">
                                 <span class="m-0">Tiket Expired</span>
-                                <h4 class="mb-0 ">{{ $tiket_expired }}</h4>
-                                <small>Hari ini: <span class="">{{ $tiket_expired_today }}</span></small>
+                                <h4 class="mb-0 non-counter" id="tiket_expired_all"></h4>
+                                <ul>
+                                    @php
+                                        $tiket_expired_today = 0; 
+                                    @endphp
+                                    @foreach($tiket_expired AS $key => $rows)
+                                        <li>{{ str_replace('_',' ',$rows->kategori) }}: {{ $rows->qty_cetak }}</li>
+                                        @php
+                                            $tiket_expired_today += $rows->qty_cetak;
+                                        @endphp
+                                    @endforeach
+                                </ul>
                                 <i class="icon-bg" data-feather="alert-octagon"></i>
                             </div>
                         </div>
@@ -86,15 +128,25 @@
                                 </div>
                                 <div class="media-body align-self-center"></div>
                                 <div class="media-body">
-                                    <ul>
-                                        @php $sum_hari_ini = 0; @endphp
+                                    <table class="table table-xs">
+                                        @php
+                                            $sum_hari_ini = 0; 
+                                        @endphp
                                         @foreach($hari_ini AS $key => $rows)
-                                        @php $sum_hari_ini += $rows->tarif @endphp
-                                            <li>{{ $rows->nama_kendaraan }} : {{ number_format($rows->tarif) }}</li>
+                                            <tr>
+                                                <td>{{ $rows->kendaraan->nama_kendaraan }}</td> 
+                                                <td>{{ number_format($rows->sum) }}</td>
+                                            </tr>
+                                        
+                                        @php
+                                            $sum_hari_ini += $rows->sum; 
+                                        @endphp
                                         @endforeach
-                                    </ul>
-                                    <h5 class="mb-0">Rp.<span class="">{{ number_format($sum_hari_ini) }}</span></h5>
-                                 
+                                        <tr>
+                                            <td>Total</td>
+                                            <td><b>{{ number_format($sum_hari_ini) }}</b></td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -106,7 +158,25 @@
                                 </div>
                                 <div class="media-body align-self-center"></div>
                                 <div class="media-body ps-2">
-                                    <h5 class="mb-0">Rp.<span class="">{{ number_format($minggu_ini) }}</span></h5>
+                                <table class="table table-xs">
+                                        @php
+                                            $sum_minggu_ini = 0; 
+                                        @endphp
+                                        @foreach($minggu_ini AS $key => $rows)
+                                            <tr>
+                                                <td>{{ $rows->kendaraan->nama_kendaraan }}</td> 
+                                                <td>{{ number_format($rows->sum) }}</td>
+                                            </tr>
+                                        
+                                        @php
+                                            $sum_minggu_ini += $rows->sum; 
+                                        @endphp
+                                        @endforeach
+                                        <tr>
+                                            <td>Total</td>
+                                            <td><b>{{ number_format($sum_minggu_ini) }}</b></td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -118,7 +188,25 @@
                                 </div>
                                 <div class="media-body align-self-center"></div>
                                 <div class="media-body">
-                                    <h5 class="mb-0">Rp.<span class="">{{ number_format($bulan_ini) }}</span></h5>
+                                    <table class="table table-xs">
+                                        @php
+                                            $sum_bulan_ini= 0; 
+                                        @endphp
+                                        @foreach($bulan_ini AS $key => $rows)
+                                            <tr>
+                                                <td>{{ $rows->kendaraan->nama_kendaraan }}</td> 
+                                                <td>{{ number_format($rows->sum) }}</td>
+                                            </tr>
+                                        
+                                        @php
+                                            $sum_bulan_ini += $rows->sum; 
+                                        @endphp
+                                        @endforeach
+                                        <tr>
+                                            <td>Total</td>
+                                            <td><b>{{ number_format($sum_bulan_ini) }}</b></td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -130,7 +218,25 @@
                                 </div>
                                 <div class="media-body align-self-center ps-3"></div>
                                 <div class="media-body ps-2">
-                                    <h5 class="mb-0">Rp.<span class="">{{ number_format($tahun_ini) }}</span></h5>
+                                <table class="table table-xs">
+                                        @php
+                                            $sum_tahun_ini = 0; 
+                                        @endphp
+                                        @foreach($tahun_ini AS $key => $rows)
+                                            <tr>
+                                                <td>{{ $rows->kendaraan->nama_kendaraan }}</td> 
+                                                <td>{{ number_format($rows->sum) }}</td>
+                                            </tr>
+                                        
+                                        @php
+                                            $sum_tahun_ini += $rows->sum; 
+                                        @endphp
+                                        @endforeach
+                                        <tr>
+                                            <td>Total</td>
+                                            <td><b>{{ number_format($sum_tahun_ini) }}</b></td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -138,7 +244,33 @@
                 </div>
             </div>
 
-            <div class="col-xl-12 box-col-12 des-xl-100 top-dealer-sec">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Gate</th>
+                                        <th>Printer</th>
+                                        <th>Sisa Kertas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($master_gate AS $key => $rows)
+                                        <tr>
+                                            <td>{{ $rows->nama }}</td>
+                                            <td>{{ $rows->nama_printer }}</td>
+                                            <td>@if($rows->kuota < 50) <i class="fa fa-warning"></i> @endif {{ $rows->kuota }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-8 box-col-8 des-xl-100 top-dealer-sec">
                 <div class="card">
                     <div class="card-header pb-0">
                         <div class="header-top d-sm-flex justify-content-between align-items-center">
@@ -153,7 +285,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordernone">
+                            <table class="table table-bordernone table-sm">
                                     <thead>
                                         <tr>
                                             <th scope="col">Operator</th>
@@ -195,12 +327,17 @@
         <script src="{{asset('assets/js/chart/apex-chart/stock-prices.js')}}"></script>
         <script src="{{asset('assets/js/prism/prism.min.js')}}"></script>
         <script src="{{asset('assets/js/clipboard/clipboard.min.js')}}"></script>
-        <script src="{{asset('assets/js//jquery.waypoints.min.js')}}"></script>
-        <script src="{{asset('assets/js//jquery.up.min.js')}}"></script>
-        <script src="{{asset('assets/js//-custom.js')}}"></script>
+        <script src="{{asset('assets/js/non-counter/jquery.waypoints.min.js')}}"></script>
+        <script src="{{asset('assets/js/non-counter/jquery.non-counterup.min.js')}}"></script>
+        <script src="{{asset('assets/js/non-counter/non-counter-custom.js')}}"></script>
         <script src="{{asset('assets/js/custom-card/custom-card.js')}}"></script>
         <script src="{{asset('assets/js/owlcarousel/owl.carousel.js')}}"></script>
         <script src="{{asset('assets/js/owlcarousel/owl-custom.js')}}"></script>
         <script src="{{asset('assets/js/dashboard/dashboard_2.js')}}"></script>
+        <script>
+            $("#tiket_tercetak_all").html("{{ $tiket_tercetak_today }}");
+            $("#tiket_keluar_all").html("{{ $tiket_keluar_today }}");
+            $("#tiket_expired_all").html("{{ $tiket_expired_today }}");
+        </script>
     @endpush
 @endsection
