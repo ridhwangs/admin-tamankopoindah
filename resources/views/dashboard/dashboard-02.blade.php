@@ -81,9 +81,9 @@ use App\Models\Parkir;
                                
                                     @foreach($tiket_tercetak_detail AS $key => $rows)
                                         @php
-                                            $tiket_keluar = Parkir::selectRaw('COUNT(*) AS qty_cetak, kategori')->groupBy('kategori')->where(['kategori' => $rows->kategori, 'status' => 'keluar'])->whereDate('created_at', Carbon::today())->first();
+                                            $tiket_keluar = Parkir::groupBy('kategori')->where(['kategori' => $rows->kategori, 'status' => 'keluar'])->whereDate('check_in', Carbon::today())->count();
                                         @endphp
-                                        <li>{{ str_replace('_',' ',$rows->kategori) }}: {{ $rows->qty_cetak - $tiket_keluar->qty_cetak }}</li>
+                                        <li>{{ str_replace('_',' ',$rows->kategori) }}: {{ $rows->qty_cetak - $tiket_keluar }}</li>
                                     @endforeach
                                 </ul>
                             </div>
