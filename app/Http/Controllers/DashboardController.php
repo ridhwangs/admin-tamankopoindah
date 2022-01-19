@@ -37,13 +37,13 @@ class DashboardController extends Controller
             'log' => Log_operator::with('operator','shift')->whereDate('created_at', $today)->orderBy('created_at','DESC')->get(),
 
             'tiket_tercetak_detail' => Parkir::selectRaw('COUNT(*) AS qty_cetak, kategori')->groupBy('kategori')->whereDate('check_in', $today)->get(),
-            'tiket_keluar_detail' => Parkir::selectRaw('COUNT(*) AS qty_cetak, kategori')->groupBy('kategori')->where('status','keluar')->where($where)->whereDate('check_in', $today)->get(),
+            'tiket_keluar_detail' => Parkir::selectRaw('COUNT(*) AS qty_cetak, kategori')->groupBy('kategori')->where('status','keluar')->where($where)->whereDate('check_out', $today)->get(),
             'tiket_expired' => Parkir::selectRaw('COUNT(*) AS qty_cetak, kategori')->groupBy('kategori')->where('status','expired')->whereDate('check_in', $today)->get(),
            
-            'hari_ini' => Parkir::with('kendaraan')->selectRaw('SUM(tarif) AS sum, kendaraan_id')->groupBy('kendaraan_id')->where($where)->whereDate('check_in', $today)->get(),
-            'minggu_ini' => Parkir::with('kendaraan')->selectRaw('SUM(tarif) AS sum, kendaraan_id')->groupBy('kendaraan_id')->whereBetween('check_in', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get(),
-            'bulan_ini' => Parkir::with('kendaraan')->selectRaw('SUM(tarif) AS sum, kendaraan_id')->groupBy('kendaraan_id')->whereMonth('check_in', Carbon::today()->month)->get(),
-            'tahun_ini' =>  Parkir::with('kendaraan')->selectRaw('SUM(tarif) AS sum, kendaraan_id')->groupBy('kendaraan_id')->whereYear('check_in', Carbon::today()->year)->get(),
+            'hari_ini' => Parkir::with('kendaraan')->selectRaw('SUM(tarif) AS sum, kendaraan_id')->groupBy('kendaraan_id')->where($where)->whereDate('check_out', $today)->get(),
+            'minggu_ini' => Parkir::with('kendaraan')->selectRaw('SUM(tarif) AS sum, kendaraan_id')->groupBy('kendaraan_id')->whereBetween('check_out', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get(),
+            'bulan_ini' => Parkir::with('kendaraan')->selectRaw('SUM(tarif) AS sum, kendaraan_id')->groupBy('kendaraan_id')->whereMonth('check_out', Carbon::today()->month)->get(),
+            'tahun_ini' =>  Parkir::with('kendaraan')->selectRaw('SUM(tarif) AS sum, kendaraan_id')->groupBy('kendaraan_id')->whereYear('check_out', Carbon::today()->year)->get(),
 
             'master_gate' => Master_gate::get(),
             'filter_operator_dashboard' => Parkir::with('operator')->where('status','keluar')->groupBy('operator_id')->get(),
