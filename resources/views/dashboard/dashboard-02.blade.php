@@ -15,8 +15,51 @@ use App\Models\Parkir;
 @endpush
     @section('content')
     
-    <div class="container-fluid general-widget mb-5">
+    <div class="container-fluid general-widget mb-5" id="dashboard">
         <div class="row">
+            <div class="col-sm-12 col-xl-12 col-lg-12">
+                <div class="card o-hidden border-0">
+                    <div class="card-header">
+                        <div class="header-top">
+                            <h6>Filter Dashboard</h6>
+                        </div>
+                        <div class="setting-list">
+                                <ul class="list-unstyled setting-option">
+                                    <li><i class="icofont icofont-refresh font-primary" onclick="reload_dashboard();"></i></li>
+                                </ul>
+                            </div>
+                    </div>
+                    <div class="card-body p-t-0 mb-0">
+                        <form class="row g-3 mb-0">
+                            <div class="col-auto">
+                                <label for="tanggal" class="visually-hidden">Tanggal</label>
+                                <input type="date" class="form-control" id="tanggal" name="tanggal" value="<?= date('Y-m-d'); ?>">
+                            </div>
+                            <div class="col-auto">
+                                <label for="operator_id" class="visually-hidden">Operator</label>
+                                <select class="form-control" name="operator_id" id="operator_id">
+                                    <option value="">Tampilkan Semua</option>
+                                    @foreach($filter_operator_dashboard AS $key => $rows)
+                                        <option value="{{ $rows->operator_id }}">{{ $rows->operator->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-auto">
+                                <label for="operator_id" class="visually-hidden">Shift</label>
+                                <select class="form-control" name="shift_id" id="shift_id">
+                                    <option value="">Semua Shift</option>
+                                    @foreach($filter_shift_dashboard AS $key => $rows)
+                                        <option value="{{ $rows->shift_id }}">{{ $rows->shift->nama_shift }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-primary mb-3">Filter</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div class="col-sm-6 col-xl-3 col-lg-6">
                 <div class="card o-hidden border-0">
                     <div class="bg-primary b-r-4 card-body">
@@ -81,7 +124,15 @@ use App\Models\Parkir;
                                
                                     @foreach($tiket_tercetak_detail AS $key => $rows)
                                         @php
-                                            $tiket_keluar = Parkir::groupBy('kategori')->where(['kategori' => $rows->kategori, 'status' => 'keluar'])->whereDate('check_in', Carbon::today())->count();
+                                        $today = Carbon::today();
+                                        if(!empty(request()->query('tanggal'))){
+                                            $today = request()->query('tanggal');
+                                        }
+                                        $where = [
+                                            'kategori' => $rows->kategori,
+                                            'status' => 'keluar'
+                                        ];
+                                        $tiket_keluar = Parkir::groupBy('kategori')->where($where)->whereDate('check_in',$today)->count();
                                         @endphp
                                         <li>{{ str_replace('_',' ',$rows->kategori) }}: {{ $rows->qty_cetak - $tiket_keluar }}</li>
                                     @endforeach
@@ -124,7 +175,7 @@ use App\Models\Parkir;
                             <div class="media border-after-xs">
                                 <div class="align-self-center me-3 text-start">
                                     <span class="widget-t mb-1">Pendapatan</span>
-                                    <h5 class="mb-0">Hari ini</h5>
+                                    <h5 class="mb-0">{{ !empty(request()->query('tanggal')) ? date('d F Y', strtotime(request()->query('tanggal'))) : date('d F Y') }}</h5>
                                 </div>
                                 <div class="media-body align-self-center"></div>
                                 <div class="media-body">
@@ -274,18 +325,12 @@ use App\Models\Parkir;
                 <div class="card">
                     <div class="card-header pb-0">
                         <div class="header-top d-sm-flex justify-content-between align-items-center">
-                            <h5>Log Hari Ini.</h5>
-                           
-                            <div class="setting-list">
-                                <ul class="list-unstyled setting-option">
-                                    <li><i class="icofont icofont-refresh reload-card font-primary"></i></li>
-                                </ul>
-                            </div>
+                            <h5>Log Aktivitas.</h5>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordernone table-sm">
+                        <div class="table-responsive" style="min-height:155px;background-color:white; height:155px; overflow-y: auto;">
+                            <table class="table table-bordernone table-xs" >
                                     <thead>
                                         <tr>
                                             <th scope="col">Operator</th>
@@ -297,13 +342,7 @@ use App\Models\Parkir;
                                     <tbody>
                                          @foreach($log AS $key => $rows)
                                             <tr>
-                                                <td class="bd-t-none u-s-tb">
-                                                    <div class="align-middle image-sm-size">
-                                                        <div class="d-inline-block">
-                                                            <h6>{{ $rows->operator->nama }}</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
+                                                <td>{{ $rows->operator->nama }}</td>
                                                 <td>{{ $rows->shift->nama_shift }}</td>
                                                 <td>{{ $rows->keterangan }}</td>
                                                 <td>{{ $rows->created_at }}</td>
@@ -327,9 +366,6 @@ use App\Models\Parkir;
         <script src="{{asset('assets/js/chart/apex-chart/stock-prices.js')}}"></script>
         <script src="{{asset('assets/js/prism/prism.min.js')}}"></script>
         <script src="{{asset('assets/js/clipboard/clipboard.min.js')}}"></script>
-        <script src="{{asset('assets/js/non-counter/jquery.waypoints.min.js')}}"></script>
-        <script src="{{asset('assets/js/non-counter/jquery.non-counterup.min.js')}}"></script>
-        <script src="{{asset('assets/js/non-counter/non-counter-custom.js')}}"></script>
         <script src="{{asset('assets/js/custom-card/custom-card.js')}}"></script>
         <script src="{{asset('assets/js/owlcarousel/owl.carousel.js')}}"></script>
         <script src="{{asset('assets/js/owlcarousel/owl-custom.js')}}"></script>
@@ -338,6 +374,13 @@ use App\Models\Parkir;
             $("#tiket_tercetak_all").html("{{ $tiket_tercetak_today }}");
             $("#tiket_keluar_all").html("{{ $tiket_keluar_today }}");
             $("#tiket_expired_all").html("{{ $tiket_expired_today }}");
+            $("#tanggal").val('{{ !empty(request()->query('tanggal')) ? request()->query('tanggal') : date('Y-m-d') }}');
+            $("#operator_id").val('{{ request()->query('operator_id') }}');
+            $("#shift_id").val('{{ request()->query('shift_id') }}');
+
+            function reload_dashboard() {
+                location.reload();
+            }
         </script>
     @endpush
 @endsection

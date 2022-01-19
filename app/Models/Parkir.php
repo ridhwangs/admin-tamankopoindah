@@ -15,4 +15,14 @@ class Parkir extends Model
     {
         return $this->setConnection('db_parkir')->belongsTo('App\Models\Kendaraan','kendaraan_id','kendaraan_id');
     }
+
+    public function operator()
+    {
+        return $this->setConnection('db_parkir')->belongsTo('App\Models\Operator','operator_id','operator_id');
+    }
+
+    public function shift()
+    {
+        return $this->setConnection('db_parkir')->belongsTo('App\Models\Shift','shift_id','shift_id');
+    }
 }
