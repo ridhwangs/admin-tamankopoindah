@@ -26,5 +26,8 @@ class AppServiceProvider extends ServiceProvider
     {
         $project_title = '| By Smartcode';
         View::share('title', $project_title);
+        if($this->app->environment('production')) {
+            \URL::forceScheme('https');
+        }
     }
 }
