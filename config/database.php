@@ -46,9 +46,9 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => '103.27.207.234',
+            'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
-            'database' => 'db_admin',
+            'database' => env('DB_DATABASE', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
@@ -56,7 +56,7 @@ return [
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
             'prefix_indexes' => true,
-            'strict' => false,
+            'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
@@ -66,9 +66,9 @@ return [
         'db_parkir' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => '103.56.149.31',
+            'host' => env('DB_HOST_2', '127.0.0.1'),
             'port' => env('DB_PORT_2', '3306'),
-            'database' => 'db_parkir',
+            'database' => env('DB_DATABASE_2', 'forge'),
             'username' => env('DB_USERNAME_2', 'forge'),
             'password' => env('DB_PASSWORD_2', ''),
             'unix_socket' => env('DB_SOCKET', ''),
