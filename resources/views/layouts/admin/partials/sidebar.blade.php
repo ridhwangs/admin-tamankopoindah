@@ -33,6 +33,9 @@
                     <li class="dropdown">
                         <a class="nav-link  {{ in_array(Route::currentRouteName(), ['index','operator']) ? 'active' : '' }} " href="{{ route('operator.index') }}"><i data-feather="users"></i><span>Operator</span></a>
                     </li>
+                    <li class="dropdown">
+                        <a class="nav-link  {{ in_array(Route::currentRouteName(), ['index','operator']) ? 'active' : '' }} " href="{{ route('operator.index') }}"><i data-feather="users"></i><span>Operator</span></a>
+                    </li>
                      <li class="sidebar-main-title">
                         <div>
                             <h6>Settings</h6>
