@@ -33,8 +33,17 @@
                     <li class="dropdown">
                         <a class="nav-link  {{ in_array(Route::currentRouteName(), ['index','operator']) ? 'active' : '' }} " href="{{ route('operator.index') }}"><i data-feather="users"></i><span>Operator</span></a>
                     </li>
+                    
+                    <li class="sidebar-main-title">
+                        <div>
+                            <h6>Member</h6>
+                        </div>
+                    </li>
                     <li class="dropdown">
-                        <a class="nav-link  {{ in_array(Route::currentRouteName(), ['index','operator']) ? 'active' : '' }} " href="{{ route('operator.index') }}"><i data-feather="users"></i><span>Operator</span></a>
+                        <a class="nav-link  {{ in_array(Route::currentRouteName(), ['index','member']) ? 'active' : '' }} " href="{{ route('member.index') }}"><i data-feather="user"></i><span>Data Member</span></a>
+                    </li>
+                    <li class="dropdown">
+                        <a class="nav-link  {{ in_array(Route::currentRouteName(), ['index','member']) ? 'active' : '' }} " href="{{ route('member.create') }}"><i data-feather="user"></i><span>Member Top Up</span></a>
                     </li>
                      <li class="sidebar-main-title">
                         <div>
