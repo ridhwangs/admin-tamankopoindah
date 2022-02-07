@@ -12,7 +12,7 @@
 		@slot('breadcrumb_title')
 			<h3>Data Member</h3>
 		@endslot
-		<li class="breadcrumb-item">Member Terdaftar</li>
+		<li class="breadcrumb-item">Member Transaksi</li>
 	@endcomponent
    
     <div class="container-fluid">
@@ -42,9 +42,8 @@
                       @foreach($member_transaksi AS $key => $rows)
                         @php
                             $status = [
-                                'aktif' => 'success',
-                                'pasif' => 'danger',
-                                'blokir' => 'dark',
+                                'approve' => 'success',
+                                'reject' => 'danger',
                             ];
                         @endphp
                         <tr>
@@ -52,7 +51,14 @@
                           <td>{{ $rows->rfid }}</td>
                           <td>{{ $rows->jumlah }}</td>
                           <td>{{ $rows->hari }}</td>
-                          <td>{{ $rows->status }}</td>
+                          <td>
+                            @if($rows->status == 'open')
+                              <a href="" class="btn btn-xs btn-success">Approve</a>
+                              <a href="" class="btn btn-xs btn-danger">Rejected</a>
+                            @else
+                              <span class="badge badge-{{ $status[$rows->status] }}">{{ $rows->status }}</span>
+                            @endif
+                          </td>
                           <td>{{ $rows->created_at }}</td>
                         </tr>
                       @endforeach

@@ -2,37 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-use App\Models\Member;
+use App\Models\Template;
 
-class MemberController extends Controller
+
+class TemplateController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    
-    public function __construct()
-    {
-        $this->member = new Member();
-    }
-
     public function index()
     {
-        $data = [
-            'member' => Member::with('kendaraan')->where('jenis_member', '!=', 'master')->orderBy('nama','asc')->get(),
-        ];
-
-        return view('member.index', $data);
+        //
     }
-
-
-
 
     /**
      * Show the form for creating a new resource.
@@ -41,16 +28,7 @@ class MemberController extends Controller
      */
     public function create()
     {
-       
-    }
-
-    public function topup()
-    {
-        $data = [
-            'member_transaksi' => $this->member->member_transaksi()->get(),
-        ];
-
-        return view('member.top_up', $data);
+        //
     }
 
     /**
@@ -72,7 +50,11 @@ class MemberController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = [
+            'template' => Template::where('api_key', $id)->get(), 
+            'api_key' => $id, 
+        ];
+        return view('template.tiket', $data);
     }
 
     /**
@@ -95,7 +77,7 @@ class MemberController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return redirect()->back()->with('message', 'Feature disabled, perlu melihat kondisi tiket terlebih dahulu');
     }
 
     /**

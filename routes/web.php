@@ -35,8 +35,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('pengaturan/tarif-member', 'App\Http\Controllers\Pengaturan\TarifMemberController');
     Route::resource('operator', 'App\Http\Controllers\OperatorController');
     Route::resource('member', 'App\Http\Controllers\MemberController');
-});
-
-Route::prefix('starter-kit')->group(function () {
-    Route::view('index', 'admin.color-version.index')->name('index');
+    Route::get('member/read/topup', 'App\Http\Controllers\MemberController@topup')->name('member.topup');
+    Route::resource('template/gate', 'App\Http\Controllers\TemplateController');
+    Route::resource('laporan', 'App\Http\Controllers\LaporanController');
+    Route::get('laporan/masuk', 'App\Http\Controllers\LaporanController@tiket')->name('tiket.masuk');
+    
 });

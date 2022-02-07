@@ -9,6 +9,7 @@ use App\Models\Log_operator;
 use App\Models\Parkir;
 use App\Models\Master_gate;
 
+
 class DashboardController extends Controller
 {
     public function index(Request $request)
