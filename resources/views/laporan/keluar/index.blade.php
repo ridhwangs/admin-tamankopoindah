@@ -122,6 +122,9 @@
                 $('#imagemodal').modal('show');   
             });		
         });
+        $("#tanggal").val('{{ !empty(request()->query('tanggal')) ? request()->query('tanggal') : date('Y-m-d') }}');
+        $("#operator_id").val('{{ request()->query('operator_id') }}');
+        $("#shift_id").val('{{ request()->query('shift_id') }}');
     </script>
 	@endpush
 
