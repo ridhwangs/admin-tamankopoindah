@@ -4,12 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Parkir extends Model
 {
     use HasFactory;
     protected $connection = 'db_parkir';
     protected $table = "parkir";
+
+    public function move_parkir()
+    {
+        $query = DB::connection('db_parkir')->table('move_parkir');
+        return $query;
+    }
 
     public function kendaraan()
     {

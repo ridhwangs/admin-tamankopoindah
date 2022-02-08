@@ -40,4 +40,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('laporan', 'App\Http\Controllers\LaporanController');
     Route::get('laporan/masuk', 'App\Http\Controllers\LaporanController@tiket')->name('tiket.masuk');
     
+    Route::resource('tiket', 'App\Http\Controllers\TiketController');
+
 });
