@@ -79,7 +79,7 @@
                                 @if($rows->kategori == 'member')
                                     <small>Not Included</small>
                                 @else
-                                    <a class="pop"><img src="//api.parkir.spsarana.com/api/image/{{ $rows->image_in }}" src="Image not loaded.."  width="100px"></a>
+                                    <a class="pop"><img src="//api.parkir.tamankopoindah.com/api/image/{{ $rows->image_in }}" src="Image not loaded.."  width="100px"></a>
                                 @endif
                                
                             </td>
