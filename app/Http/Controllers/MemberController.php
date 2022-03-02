@@ -96,6 +96,11 @@ class MemberController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $data = [
+            'status' => $request->status
+        ];
+        $this->member->member_transaksi()->where('toptup_id', $id)->update($data);
+        return redirect()->back()->with('message', 'Berhasil di simpan!');
     }
 
     /**

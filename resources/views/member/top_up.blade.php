@@ -53,8 +53,18 @@
                           <td>{{ $rows->hari }}</td>
                           <td>
                             @if($rows->status == 'open')
-                              <a href="" class="btn btn-xs btn-success">Approve</a>
-                              <a href="" class="btn btn-xs btn-danger">Rejected</a>
+                            <form method="POST" action="{{ route('member.update', $rows->topup_id) }}">
+                              @method('PUT')
+                              @csrf
+                              <input type="text" value="approve" name="status">
+                              <button type="submit" class="btn btn-xs btn-success">Approve</button>
+                            </form>
+                            <form method="POST" action="{{ route('member.update', $rows->topup_id) }}">
+                              @method('PUT')
+                              @csrf
+                              <input type="text" value="rejected" name="status">
+                              <button type="submit" class="btn btn-xs btn-danger">Reject</button>
+                            </form>
                             @else
                               <span class="badge badge-{{ $status[$rows->status] }}">{{ $rows->status }}</span>
                             @endif
