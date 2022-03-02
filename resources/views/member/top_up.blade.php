@@ -43,7 +43,7 @@
                         @php
                             $status = [
                                 'approve' => 'success',
-                                'reject' => 'danger',
+                                'rejected' => 'danger',
                             ];
                         @endphp
                         <tr>
