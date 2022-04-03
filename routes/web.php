@@ -36,10 +36,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('operator', 'App\Http\Controllers\OperatorController');
     Route::resource('member', 'App\Http\Controllers\MemberController');
     Route::get('member/read/topup', 'App\Http\Controllers\MemberController@topup')->name('member.topup');
+    Route::get('member/export/{jenis}',  [App\Http\Controllers\MemberController::class, 'export'])->name('member.export');
     Route::resource('template/gate', 'App\Http\Controllers\TemplateController');
     Route::resource('laporan', 'App\Http\Controllers\LaporanController');
+    Route::get('laporan/export/{jenis}',  [App\Http\Controllers\LaporanController::class, 'export'])->name('laporan.export');
     Route::get('laporan/masuk', 'App\Http\Controllers\LaporanController@tiket')->name('tiket.masuk');
     
     Route::resource('tiket', 'App\Http\Controllers\TiketController');
+    
 
 });

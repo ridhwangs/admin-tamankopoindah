@@ -51,6 +51,7 @@
                       </div>
                       <div class="col-auto">
                           <button type="submit" class="btn btn-primary mb-3">Filter</button>
+                          <a href="{{ route('laporan.export','keluar') }}?tanggal={{ request()->tanggal; }}&operator_id={{ request()->operator_id; }}&shift_id={{ request()->shift_id; }}" class="btn btn-primary mb-3">Export</a>
                       </div>
                   </form>
               </div>
@@ -95,8 +96,13 @@
                       @endforeach
                     </tbody>
                   </table>
+                  
                 </div>
+               
               </div>
+                <div class="card-footer">
+                    {{ $parkir->appends(request()->input())->links(); }}
+                <div>
             </div>
           </div>
         </div>

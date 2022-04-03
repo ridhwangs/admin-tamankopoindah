@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 use App\Models\Operator;
 
@@ -31,7 +32,7 @@ class OperatorController extends Controller
      */
     public function create()
     {
-        //
+        return view('operator.create');
     }
 
     /**
@@ -42,7 +43,30 @@ class OperatorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'username' => 'required|unique:db_parkir.operator',
+            'password' => 'required|',
+            'nama' => 'required|',
+            
+        ];
+  
+        $validator = Validator::make($request->all(), $rules);
+  
+        if($validator->fails()){
+            return redirect()->back()->withErrors($validator)->withInput($request->all);
+        }
+
+        $data = [
+            'username' => $request->username,
+            'password' => $request->password,
+            'nama' => $request->nama,
+            'email' => $request->email,
+            'alamat' => $request->alamat,
+            'no_telp' => $request->no_telp,
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+        $create = Operator::insert($data);
+        return redirect()->route('operator');
     }
 
     /**

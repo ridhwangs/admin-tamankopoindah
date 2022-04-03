@@ -24,9 +24,9 @@
                       <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
                   </div>
             @endif
-               <div class="bookmark mb-3">
-            <button type="submit" form="form-batch" class="btn btn-xs rounded-0 btn-primary"><i class="icofont icofont-save"></i> Simpan semua Perubahan</button>
-          </div>
+            <div class="bookmark mb-3">
+              <button type="submit" form="form-batch" class="btn btn-xs rounded-0 btn-primary"><i class="icofont icofont-save"></i> Simpan semua Perubahan</button>
+            </div>
             <div class="card">
               <div class="card-body p-0 height-equal">
                 <div class="table-responsive">
