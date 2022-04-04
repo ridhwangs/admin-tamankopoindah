@@ -60,7 +60,7 @@
                           <td>{{ $rows->level }}</td>
                           <td>{{ $status[$rows->status] }}</td>
                           <td>
-                            @if(empty())
+                            @if(empty($rows->last_login->created_at))
                               -
                             @else
                               {{ $rows->last_login->created_at }}
