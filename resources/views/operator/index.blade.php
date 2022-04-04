@@ -59,7 +59,12 @@
                           <td>{{ $rows->email }}</td>
                           <td>{{ $rows->level }}</td>
                           <td>{{ $status[$rows->status] }}</td>
-                          <td>{{ $rows->last_login->created_at }}</td>
+                          <td>
+                            @if(empty())
+                              -
+                            @else
+                              {{ $rows->last_login->created_at }}
+                          </td>
                         </tr>
                       @endforeach
                     </tbody>
