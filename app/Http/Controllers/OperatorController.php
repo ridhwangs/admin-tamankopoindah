@@ -66,7 +66,7 @@ class OperatorController extends Controller
             'created_at' => date('Y-m-d H:i:s')
         ];
         $create = Operator::insert($data);
-        return redirect()->route('operator');
+        return redirect()->route('operator.index');
     }
 
     /**
