@@ -64,6 +64,7 @@
                               -
                             @else
                               {{ $rows->last_login->created_at }}
+                            @endif
                           </td>
                         </tr>
                       @endforeach
