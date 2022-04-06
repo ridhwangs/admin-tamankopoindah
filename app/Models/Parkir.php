@@ -32,4 +32,9 @@ class Parkir extends Model
     {
         return $this->setConnection('db_parkir')->belongsTo('App\Models\Shift','shift_id','shift_id');
     }
+
+    public function member()
+    {
+        return $this->setConnection('db_parkir')->belongsTo('App\Models\Member','rfid','rfid');
+    }
 }
