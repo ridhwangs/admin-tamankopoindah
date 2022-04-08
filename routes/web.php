@@ -43,6 +43,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('laporan/masuk', 'App\Http\Controllers\LaporanController@tiket')->name('tiket.masuk');
     
     Route::resource('tiket', 'App\Http\Controllers\TiketController');
+
+    Route::get('absensi',  [App\Http\Controllers\AbsensiController::class, 'index'])->name('absensi.index');
+    Route::get('absensi/export',  [App\Http\Controllers\AbsensiController::class, 'export'])->name('absensi.export');
     
 
 });
