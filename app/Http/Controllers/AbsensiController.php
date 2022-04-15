@@ -96,9 +96,13 @@ class AbsensiController extends Controller
                 $no = 0;
                 $rowCount = 6;
                 foreach ($query as $key => $rows) {
-                    $no++;
-                    
-                    $sheet->setCellValue('A' . $rowCount, $no);
+                    if (@$query[$key-1]->nama != $rows->nama) {
+                        $no = 0;
+                        $no++;
+                        $rowCount = $rowCount + 1;
+
+                    }
+                    $sheet->setCellValue('A' . $rowCount, $no++);
                     $sheet->setCellValue('B' . $rowCount, $rows->rfid);
                     $sheet->setCellValue('C' . $rowCount, $rows->nama);
                     $sheet->setCellValue('D' . $rowCount, date('d/m/Y', strtotime($rows->check_in)));

@@ -44,11 +44,25 @@
                       </tr>
                     </thead>
                     <tbody>
+                      @php
+                        $no = 0;
+                      @endphp
                       @foreach($absensi AS $key => $rows)
+                        @php
                        
+                        if(@$absensi[$key-1]->nama != $rows->nama) {
+                           $no = 0;
+                        $no++;
+                        @endphp
                         <tr>
-                          <td>{{ $key+1 }}</td>
-                          <td> {{ $rows->rfid }}</td>
+                          <td colspan="7"></td>
+                        </tr>
+                        @php
+                        }
+                        @endphp
+                        <tr>
+                          <td>{{ $no++ }}</td>
+                          <td>{{ $rows->rfid }}</td>
                           <td>{{ $rows->nama }}</td>
                           <td class="bg-success">{{ date('d F y', strtotime($rows->check_in)) }}</td>
                           <td class="bg-success">{{ date('H:i', strtotime($rows->check_in)) }}</td>
