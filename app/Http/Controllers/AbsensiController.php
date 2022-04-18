@@ -20,22 +20,22 @@ class AbsensiController extends Controller
     public function index()
     {
         $data = [
-            'absensi' => $this->absensi->absensi_mingguan()->whereBetween('check_out', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->groupBy('parkir.rfid')->get(),
+            'absensi' => $this->absensi->absensi_mingguan()->groupBy('parkir.rfid')->get(),
         ];
         return view('absensi.index', $data);
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $data = [
             'rfid' => $id,
-            'absensi' => $this->absensi->absensi_mingguan()->where('parkir.rfid', $id)->whereBetween('check_out', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get(),
+            'absensi' => $this->absensi->absensi_mingguan()->whereDate('check_in', $request->tanggal)->where('parkir.rfid', $id)->get(),
         ];
 
         return view('absensi.show', $data);
     }
 
-    public function export($id)
+    public function export(Request $request, $id)
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -44,8 +44,8 @@ class AbsensiController extends Controller
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
-        $sheet->setCellValue('A1', 'ABSENSI MINGGUAN');
-        $sheet->setCellValue('A2', Carbon::now()->startOfWeek() .' s/d '. Carbon::now()->endOfWeek());
+        $sheet->setCellValue('A1', 'ABSENSI HARIAN');
+        $sheet->setCellValue('A2', $request->tanggal);
         $spreadsheet->getActiveSheet()->getRowDimension('4')->setRowHeight(25, 'pt');
         $HeadstyleArray = array(
             'borders' => array(
@@ -102,22 +102,24 @@ class AbsensiController extends Controller
             ],
         );
 
-        $query =  $this->absensi->absensi_mingguan()->where('parkir.rfid', $id)->whereBetween('check_out', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
-        $no = 0;
+        $query =  $this->absensi->absensi_mingguan()->where('parkir.rfid', $id)->whereDate('check_in', $request->tanggal)->get();
+        $no = 1;
         $rowCount = 6;
         foreach ($query as $key => $rows) {
-             if(date('Y-m-d', strtotime(@$query[$key-1]->check_in)) != date('Y-m-d', strtotime($rows->check_in))) {
-                $no = 0;
-                $no++;
-                $rowCount = $rowCount + 1;
-            }
+           
             $sheet->setCellValue('A' . $rowCount, $no++);
             $sheet->setCellValue('B' . $rowCount, $rows->rfid);
             $sheet->setCellValue('C' . $rowCount, $rows->nama);
             $sheet->setCellValue('D' . $rowCount, date('d/m/Y', strtotime($rows->check_in)));
             $sheet->setCellValue('E' . $rowCount, date('H:i', strtotime($rows->check_in)));
-            $sheet->setCellValue('F' . $rowCount, date('d/m/Y', strtotime($rows->check_out)));
-            $sheet->setCellValue('G' . $rowCount, date('H:i', strtotime($rows->check_out)));
+            if(empty($rows->check_out)){
+                 $sheet->setCellValue('F' . $rowCount, '-');
+                 $sheet->mergeCells('F'.$rowCount.':G'.$rowCount);
+            }else{
+                $sheet->setCellValue('F' . $rowCount, date('d/m/Y', strtotime($rows->check_out)));
+                $sheet->setCellValue('G' . $rowCount, date('H:i', strtotime($rows->check_out)));
+            }
+            
             
             $sheet->getStyle('A'.$rowCount.':G'.$rowCount)->applyFromArray($IsistyleArray);
             $rowCount++;
