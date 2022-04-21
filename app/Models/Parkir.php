@@ -11,6 +11,7 @@ class Parkir extends Model
     use HasFactory;
     protected $connection = 'db_parkir';
     protected $table = "parkir";
+    protected $primaryKey = "parkir_id";
 
     public function move_parkir()
     {
@@ -37,4 +38,5 @@ class Parkir extends Model
     {
         return $this->setConnection('db_parkir')->belongsTo('App\Models\Member','rfid','rfid');
     }
+    
 }

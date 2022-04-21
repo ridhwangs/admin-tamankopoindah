@@ -1,6 +1,7 @@
 <?php 
 use Carbon\Carbon;
 use App\Models\Parkir;
+use App\Models\ParkirLocal;
 ?>
 @extends('layouts.admin.master')
 
@@ -18,10 +19,11 @@ use App\Models\Parkir;
     <div class="container-fluid general-widget mb-5" id="dashboard">
         <div class="row">
             <div class="col-sm-12 col-xl-12 col-lg-12">
+                <h3>Last Sync On : {{ $log_sync->created_at }}</h3>
                 <div class="card o-hidden border-0">
                     <div class="card-header">
                         <div class="header-top">
-                            <h6>Filter Dashboard</h6>
+                            <h6>Filter Dashboard </h6>
                         </div>
                         <div class="setting-list">
                                 <ul class="list-unstyled setting-option">
@@ -68,6 +70,7 @@ use App\Models\Parkir;
                             <div class="media-body">
                                 <span class="m-0">Tiket Tercetak</span>
                                 <h4 class="mb-0 non-counter" id="tiket_tercetak_all"></h4>
+                             
                                 <ul class="small">
                                     @php
                                         $tiket_tercetak_today = 0; 
@@ -165,6 +168,95 @@ use App\Models\Parkir;
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            
+            <div class="col-sm-6 col-xl-3 col-lg-6">
+                <div class="card o-hidden border-0">
+                    <div class="bg-primary b-r-4 card-body">
+                        <div class="media static-top-widget">
+                            <div class="align-self-center text-center"><i data-feather="arrow-up"></i></div>
+                            <div class="media-body">
+                                <span class="m-0">Tiket Tercetak Local</span>
+                                <h4 class="mb-0 non-counter" id="tiket_tercetak_local"></h4>
+                             
+                                <ul class="small">
+                                    @php
+                                        $tiket_tercetak_today_local = 0; 
+                                    @endphp
+                                    @foreach($tiket_tercetak_local AS $key => $rows)
+                                        <li>{{ str_replace('_',' ',$rows->kategori) }}: {{ $rows->qty_cetak }}</li>
+                                        
+                                    @php
+                                        $tiket_tercetak_today_local += $rows->qty_cetak; 
+                                    @endphp
+                                    @endforeach
+                                </ul>
+                             
+                                <i class="icon-bg" data-feather="arrow-up"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-3 col-lg-6">
+                <div class="card o-hidden border-0">
+                    <div class="bg-warning b-r-4 card-body">
+                        <div class="media static-top-widget">
+                            <div class="align-self-center text-center"><i data-feather="arrow-down"></i></div>
+                            <div class="media-body">
+                                <span class="m-0">Tiket Keluar Local</span>
+                                <h4 class="mb-0 non-counter" id="tiket_keluar_local"></h4>
+                                <ul class="small">
+                                    @php
+                                        $tiket_keluar_today_local = 0; 
+                                    @endphp
+                                    @foreach($tiket_keluar_local AS $key => $rows)
+                                        <li>{{ str_replace('_',' ',$rows->kategori) }}: {{ $rows->qty_cetak }}</li>
+                                    @php
+                                        $tiket_keluar_today_local += $rows->qty_cetak; 
+                                    @endphp
+                                    @endforeach
+                                </ul>
+                                <i class="icon-bg" data-feather="arrow-down"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-3 col-lg-6">
+                <div class="card o-hidden border-0">
+                    <div class="bg-secondary b-r-4 card-body">
+                        <div class="media static-top-widget">
+                            <div class="align-self-center text-center"><i data-feather="archive"></i></div>
+                            <div class="media-body">
+                                <span class="m-0">Tiket Sisa Local</span>
+                                <h4 class="mb-0 non-counter">{{ $tiket_tercetak_today_local - $tiket_keluar_today_local }}</h4>
+                                <ul class="small">
+                               
+                                    @foreach($tiket_tercetak_local AS $key => $rows)
+                                        @php
+                                        $today = Carbon::today();
+                                        if(!empty(request()->query('tanggal'))){
+                                            $today = request()->query('tanggal');
+                                        }
+                                        $where = [
+                                            'kategori' => $rows->kategori,
+                                            'status' => 'keluar'
+                                        ];
+                                        $tiket_keluar = ParkirLocal::groupBy('kategori')->where($where)->whereDate('check_in',$today)->count();
+                                        @endphp
+                                        <li>{{ str_replace('_',' ',$rows->kategori) }}: {{ $rows->qty_cetak - $tiket_keluar }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>     
+            <div class="col-sm-6 col-xl-3 col-lg-6">
+                <div class="card o-hidden border-0">
+                    <a href="{{ route('posting') }}" class="btn btn-primary">Posting Data</a>
                 </div>
             </div>
             
@@ -372,6 +464,8 @@ use App\Models\Parkir;
         <script src="{{asset('assets/js/dashboard/dashboard_2.js')}}"></script>
         <script>
             $("#tiket_tercetak_all").html("{{ $tiket_tercetak_today }}");
+            $("#tiket_tercetak_local").html("{{ $tiket_tercetak_today_local }}");
+            $("#tiket_keluar_local").html("{{ $tiket_keluar_today_local }}");
             $("#tiket_keluar_all").html("{{ $tiket_keluar_today }}");
             $("#tiket_expired_all").html("{{ $tiket_expired_today }}");
             $("#tanggal").val('{{ !empty(request()->query('tanggal')) ? request()->query('tanggal') : date('Y-m-d') }}');

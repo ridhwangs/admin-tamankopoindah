@@ -29,6 +29,7 @@ Route::prefix('auth')->group(function (){
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');
+    Route::get('posting', 'App\Http\Controllers\DashboardController@posting')->name('posting');
     Route::resource('pengaturan/tarif-berlaku', 'App\Http\Controllers\Pengaturan\TarifBerlakuController');
     Route::resource('pengaturan/tarif-flat', 'App\Http\Controllers\Pengaturan\TarifFlatController');
     Route::resource('pengaturan/tarif-progressive', 'App\Http\Controllers\Pengaturan\TarifProgressiveController');

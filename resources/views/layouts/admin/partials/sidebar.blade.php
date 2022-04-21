@@ -41,7 +41,7 @@
                                 @if($rows->kd_menu == $rows_am)
                                 <li class="dropdown">
                                     <a class="nav-link menu-title" href="javascript:void(0)">{!! $rows->fa_icon !!}<span> {{ $rows->nm_menu }}</span></a>
-                                    <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/pengaturan') }};">
+                                    <ul class="nav-submenu menu-content" >
                                         <li>
                                             @foreach ($subMenu as $subRows)
                                                 @foreach($active_menu as $rows_am)
