@@ -171,7 +171,7 @@ use App\Models\ParkirLocal;
                 </div>
             </div>
             <!-- for local only -->
-            @if(request()->ip() == '127.0.0.1')
+            @if((request()->ip() == '127.0.0.1') || (request()->ip() == '::1'))
             <div class="col-sm-6 col-xl-3 col-lg-6">
                 <div class="card o-hidden border-0">
                     <div class="bg-primary b-r-4 card-body">
@@ -467,7 +467,7 @@ use App\Models\ParkirLocal;
         <script src="{{asset('assets/js/dashboard/dashboard_2.js')}}"></script>
         <script>
             $("#tiket_tercetak_all").html("{{ $tiket_tercetak_today }}");
-            @if(request()->ip() == '127.0.0.1')
+            @if((request()->ip() == '127.0.0.1') || (request()->ip() == '::1'))
             $("#tiket_tercetak_local").html("{{ $tiket_tercetak_today_local }}");
             $("#tiket_keluar_local").html("{{ $tiket_keluar_today_local }}");
             @endif
