@@ -19,7 +19,7 @@ use App\Models\ParkirLocal;
     <div class="container-fluid general-widget mb-5" id="dashboard">
         <div class="row">
             <div class="col-sm-12 col-xl-12 col-lg-12">
-                <h3>Last Sync On : {{ $log_sync->created_at }}</h3>
+                <h3>Last Sync On : {{ $log_sync->created_at }} - {{ request()->ip() }}</h3>
                 <div class="card o-hidden border-0">
                     <div class="card-header">
                         <div class="header-top">
@@ -467,8 +467,10 @@ use App\Models\ParkirLocal;
         <script src="{{asset('assets/js/dashboard/dashboard_2.js')}}"></script>
         <script>
             $("#tiket_tercetak_all").html("{{ $tiket_tercetak_today }}");
+            @if(request()->ip() == '127.0.0.1')
             $("#tiket_tercetak_local").html("{{ $tiket_tercetak_today_local }}");
             $("#tiket_keluar_local").html("{{ $tiket_keluar_today_local }}");
+            @endif
             $("#tiket_keluar_all").html("{{ $tiket_keluar_today }}");
             $("#tiket_expired_all").html("{{ $tiket_expired_today }}");
             $("#tanggal").val('{{ !empty(request()->query('tanggal')) ? request()->query('tanggal') : date('Y-m-d') }}');
