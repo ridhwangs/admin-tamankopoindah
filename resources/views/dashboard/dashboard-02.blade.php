@@ -170,7 +170,8 @@ use App\Models\ParkirLocal;
                     </div>
                 </div>
             </div>
-            
+            <!-- for local only -->
+            @if(request()->ip() == '127.0.0.1')
             <div class="col-sm-6 col-xl-3 col-lg-6">
                 <div class="card o-hidden border-0">
                     <div class="bg-primary b-r-4 card-body">
@@ -259,6 +260,8 @@ use App\Models\ParkirLocal;
                     <a href="{{ route('posting') }}" class="btn btn-primary">Posting Data</a>
                 </div>
             </div>
+            @endif
+            <!-- end for local only -->
             
             <div class="col-xl-12 xl-100 box-col-12">
                 <div class="widget-joins card widget-arrow">
