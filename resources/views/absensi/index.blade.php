@@ -12,7 +12,7 @@
 		@slot('breadcrumb_title')
 			<h3>Data Absensi</h3>
 		@endslot
-		<li class="breadcrumb-item">Absen Mingguan</li>
+		<li class="breadcrumb-item">Absensi berdasarkan Member</li>
 	@endcomponent
    
     <div class="container-fluid mb-5">

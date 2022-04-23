@@ -20,16 +20,24 @@ class AbsensiController extends Controller
     public function index()
     {
         $data = [
-            'absensi' => $this->absensi->absensi_mingguan()->groupBy('parkir.rfid')->get(),
+            'absensi' => Absensi::member_absensi()->groupBy('parkir.rfid')->get(),
         ];
         return view('absensi.index', $data);
     }
 
     public function show(Request $request, $id)
     {
+        $berdasarkan = $request->berdasarkan;
+        if($berdasarkan == 'bulan_now'){
+            $query = Absensi::member_absensi()->whereMonth('check_out', Carbon::today()->month)->where('parkir.rfid', $id);
+        }else if($berdasarkan == 'minggu_now'){
+            $query = Absensi::member_absensi()->whereBetween('check_out', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->where('parkir.rfid', $id);
+        }else{
+            $query = Absensi::member_absensi()->whereDate('check_in', $request->tanggal)->where('parkir.rfid', $id);
+        }
         $data = [
             'rfid' => $id,
-            'absensi' => $this->absensi->absensi_mingguan()->whereDate('check_in', $request->tanggal)->where('parkir.rfid', $id)->get(),
+            'absensi' => $query->get(),
         ];
 
         return view('absensi.show', $data);
@@ -40,13 +48,12 @@ class AbsensiController extends Controller
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        $file_name = "ABSENSI-".date('YmdHis');
+        $file_name = "ABSENSI-".$id."-".date('YmdHis');
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
-        $sheet->setCellValue('A1', 'ABSENSI HARIAN');
-        $sheet->setCellValue('A2', $request->tanggal);
-        $spreadsheet->getActiveSheet()->getRowDimension('4')->setRowHeight(25, 'pt');
+        $sheet->setCellValue('A1', 'ABSENSI');
+        $sheet->setCellValue('A2', 'RFID: '.$id);
         $HeadstyleArray = array(
             'borders' => array(
                 'outline' => array(
@@ -101,8 +108,15 @@ class AbsensiController extends Controller
                 ],
             ],
         );
-
-        $query =  $this->absensi->absensi_mingguan()->where('parkir.rfid', $id)->whereDate('check_in', $request->tanggal)->get();
+        $berdasarkan = $request->berdasarkan;
+        if($berdasarkan == 'bulan_now'){
+            $query = Absensi::member_absensi()->whereMonth('check_out', Carbon::today()->month)->where('parkir.rfid', $id);
+        }else if($berdasarkan == 'minggu_now'){
+            $query = Absensi::member_absensi()->whereBetween('check_out', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->where('parkir.rfid', $id);
+        }else{
+            $query = Absensi::member_absensi()->whereDate('check_in', $request->tanggal)->where('parkir.rfid', $id);
+        }
+        $query =  $query->get();
         $no = 1;
         $rowCount = 6;
         foreach ($query as $key => $rows) {

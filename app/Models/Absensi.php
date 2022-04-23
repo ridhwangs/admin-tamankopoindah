@@ -13,7 +13,7 @@ class Absensi extends Model
     protected $table = "parkir";
 
     
-    public function absensi_mingguan()
+    public static function member_absensi()
     {
         $query = DB::connection('db_parkir')
             ->table('parkir')
