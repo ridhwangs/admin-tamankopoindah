@@ -29,9 +29,9 @@ class AbsensiController extends Controller
     {
         $berdasarkan = $request->berdasarkan;
         if($berdasarkan == 'bulan_now'){
-            $query = Absensi::member_absensi()->whereMonth('check_out', Carbon::today()->month)->where('parkir.rfid', $id);
+            $query = Absensi::member_absensi()->whereMonth('check_in', Carbon::today()->month)->where('parkir.rfid', $id);
         }else if($berdasarkan == 'minggu_now'){
-            $query = Absensi::member_absensi()->whereBetween('check_out', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->where('parkir.rfid', $id);
+            $query = Absensi::member_absensi()->whereBetween('check_in', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->where('parkir.rfid', $id);
         }else{
             $query = Absensi::member_absensi()->whereDate('check_in', $request->tanggal)->where('parkir.rfid', $id);
         }
@@ -110,9 +110,9 @@ class AbsensiController extends Controller
         );
         $berdasarkan = $request->berdasarkan;
         if($berdasarkan == 'bulan_now'){
-            $query = Absensi::member_absensi()->whereMonth('check_out', Carbon::today()->month)->where('parkir.rfid', $id);
+            $query = Absensi::member_absensi()->whereMonth('check_in', Carbon::today()->month)->where('parkir.rfid', $id);
         }else if($berdasarkan == 'minggu_now'){
-            $query = Absensi::member_absensi()->whereBetween('check_out', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->where('parkir.rfid', $id);
+            $query = Absensi::member_absensi()->whereBetween('check_in', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->where('parkir.rfid', $id);
         }else{
             $query = Absensi::member_absensi()->whereDate('check_in', $request->tanggal)->where('parkir.rfid', $id);
         }
