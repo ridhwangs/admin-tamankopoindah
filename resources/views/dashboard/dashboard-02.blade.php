@@ -170,98 +170,6 @@ use App\Models\ParkirLocal;
                     </div>
                 </div>
             </div>
-            <!-- for local only -->
-            @if((request()->ip() == '127.0.0.1') || (request()->ip() == '::1'))
-            <div class="col-sm-6 col-xl-3 col-lg-6">
-                <div class="card o-hidden border-0">
-                    <div class="bg-primary b-r-4 card-body">
-                        <div class="media static-top-widget">
-                            <div class="align-self-center text-center"><i data-feather="arrow-up"></i></div>
-                            <div class="media-body">
-                                <span class="m-0">Tiket Tercetak Local</span>
-                                <h4 class="mb-0 non-counter" id="tiket_tercetak_local"></h4>
-                             
-                                <ul class="small">
-                                    @php
-                                        $tiket_tercetak_today_local = 0; 
-                                    @endphp
-                                    @foreach($tiket_tercetak_local AS $key => $rows)
-                                        <li>{{ str_replace('_',' ',$rows->kategori) }}: {{ $rows->qty_cetak }}</li>
-                                        
-                                    @php
-                                        $tiket_tercetak_today_local += $rows->qty_cetak; 
-                                    @endphp
-                                    @endforeach
-                                </ul>
-                             
-                                <i class="icon-bg" data-feather="arrow-up"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-xl-3 col-lg-6">
-                <div class="card o-hidden border-0">
-                    <div class="bg-warning b-r-4 card-body">
-                        <div class="media static-top-widget">
-                            <div class="align-self-center text-center"><i data-feather="arrow-down"></i></div>
-                            <div class="media-body">
-                                <span class="m-0">Tiket Keluar Local</span>
-                                <h4 class="mb-0 non-counter" id="tiket_keluar_local"></h4>
-                                <ul class="small">
-                                    @php
-                                        $tiket_keluar_today_local = 0; 
-                                    @endphp
-                                    @foreach($tiket_keluar_local AS $key => $rows)
-                                        <li>{{ str_replace('_',' ',$rows->kategori) }}: {{ $rows->qty_cetak }}</li>
-                                    @php
-                                        $tiket_keluar_today_local += $rows->qty_cetak; 
-                                    @endphp
-                                    @endforeach
-                                </ul>
-                                <i class="icon-bg" data-feather="arrow-down"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-xl-3 col-lg-6">
-                <div class="card o-hidden border-0">
-                    <div class="bg-secondary b-r-4 card-body">
-                        <div class="media static-top-widget">
-                            <div class="align-self-center text-center"><i data-feather="archive"></i></div>
-                            <div class="media-body">
-                                <span class="m-0">Tiket Sisa Local</span>
-                                <h4 class="mb-0 non-counter">{{ $tiket_tercetak_today_local - $tiket_keluar_today_local }}</h4>
-                                <ul class="small">
-                               
-                                    @foreach($tiket_tercetak_local AS $key => $rows)
-                                        @php
-                                        $today = Carbon::today();
-                                        if(!empty(request()->query('tanggal'))){
-                                            $today = request()->query('tanggal');
-                                        }
-                                        $where = [
-                                            'kategori' => $rows->kategori,
-                                            'status' => 'keluar'
-                                        ];
-                                        $tiket_keluar = ParkirLocal::groupBy('kategori')->where($where)->whereDate('check_in',$today)->count();
-                                        @endphp
-                                        <li>{{ str_replace('_',' ',$rows->kategori) }}: {{ $rows->qty_cetak - $tiket_keluar }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>     
-            <div class="col-sm-6 col-xl-3 col-lg-6">
-                <div class="card o-hidden border-0">
-                    <a href="{{ route('posting') }}" class="btn btn-primary">Posting Data</a>
-                </div>
-            </div>
-            @endif
-            <!-- end for local only -->
             
             <div class="col-xl-12 xl-100 box-col-12">
                 <div class="widget-joins card widget-arrow">
@@ -467,10 +375,7 @@ use App\Models\ParkirLocal;
         <script src="{{asset('assets/js/dashboard/dashboard_2.js')}}"></script>
         <script>
             $("#tiket_tercetak_all").html("{{ $tiket_tercetak_today }}");
-            @if((request()->ip() == '127.0.0.1') || (request()->ip() == '::1'))
-            $("#tiket_tercetak_local").html("{{ $tiket_tercetak_today_local }}");
-            $("#tiket_keluar_local").html("{{ $tiket_keluar_today_local }}");
-            @endif
+          
             $("#tiket_keluar_all").html("{{ $tiket_keluar_today }}");
             $("#tiket_expired_all").html("{{ $tiket_expired_today }}");
             $("#tanggal").val('{{ !empty(request()->query('tanggal')) ? request()->query('tanggal') : date('Y-m-d') }}');

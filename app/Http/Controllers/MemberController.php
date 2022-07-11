@@ -12,6 +12,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 use App\Models\Member;
 use App\Models\Parkir;
+use App\Models\Kendaraan;
 
 class MemberController extends Controller
 {
@@ -45,7 +46,10 @@ class MemberController extends Controller
      */
     public function create()
     {
-       
+        $data = [
+            'kendaraan' => Kendaraan::get(),
+        ];
+        return view('member.create', $data);
     }
 
     public function topup(Request $request)
@@ -61,6 +65,11 @@ class MemberController extends Controller
         ];
 
         return view('member.top_up', $data);
+    }
+
+    public function topup_create(Request $request)
+    {
+        return view('member.top_up_create');
     }
 
     /**

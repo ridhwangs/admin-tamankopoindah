@@ -22,6 +22,7 @@
                 <div class="card-header">
                     <div class="header-top">
                         <h6>Filter</h6>
+                        <a href="{{ route('member.topup_create') }}" class="btn rounded-0 btn-primary">TOP UP SALDO</a>
                     </div>
                     <div class="setting-list">
                         <ul class="list-unstyled setting-option">

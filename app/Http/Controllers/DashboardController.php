@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\Log_operator;
 use App\Models\Parkir;
-use App\Models\ParkirLocal;
 use App\Models\Master_gate;
 use App\Models\Sync;
 
@@ -55,8 +54,6 @@ class DashboardController extends Controller
             'filter_operator_dashboard' => Parkir::with('operator')->where('status','keluar')->groupBy('operator_id')->get(),
             'filter_shift_dashboard' => Parkir::with('shift')->where('status','keluar')->groupBy('shift_id')->get(),
             
-            'tiket_tercetak_local' => ParkirLocal::selectRaw('COUNT(*) AS qty_cetak, kategori')->groupBy('kategori')->whereDate('check_in', $today)->get(),
-            'tiket_keluar_local' => ParkirLocal::selectRaw('COUNT(*) AS qty_cetak, kategori')->groupBy('kategori')->where('status','keluar')->where($where)->whereDate('check_out', $today)->get(),
             'log_sync' => Sync::orderBy('id', 'DESC')->first(),
         ];
         return view('dashboard.dashboard-02', $data);

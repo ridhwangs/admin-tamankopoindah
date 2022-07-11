@@ -26,6 +26,7 @@
             @endif
             <div class="bookmark mb-3">
               <a href="{{ route('member.export','member') }}" class="btn btn-xs rounded-0 btn-primary">EXPORT</a>
+              <a href="{{ route('member.create') }}" class="btn btn-xs rounded-0 btn-warning">CREATE</a>
             </div>
             <div class="card">
               <div class="card-body p-0 height-equal">
