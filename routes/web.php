@@ -37,7 +37,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('operator', 'App\Http\Controllers\OperatorController');
     Route::resource('member', 'App\Http\Controllers\MemberController');
     Route::get('member/read/topup', 'App\Http\Controllers\MemberController@topup')->name('member.topup');
-    Route::get('member/read/topup/create', 'App\Http\Controllers\MemberController@topup_create')->name('member.topup_create');
+    Route::get('member/read/topup/create/{rfid}', 'App\Http\Controllers\MemberController@topup_create')->name('member.topup_create');
+    Route::post('member/store/topup', 'App\Http\Controllers\MemberController@store_top_up')->name('member.store_top_up');
     Route::get('member/export/{jenis}',  [App\Http\Controllers\MemberController::class, 'export'])->name('member.export');
     Route::resource('template/gate', 'App\Http\Controllers\TemplateController');
     Route::resource('laporan', 'App\Http\Controllers\LaporanController');

@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 
-@section('title')Data Operator
+@section('title')Data Member
  {{ $title }}
 @endsection
 
@@ -25,10 +25,27 @@
                   </div>
             @endif
             <div class="bookmark mb-3">
-              <a href="{{ route('member.export','member') }}" class="btn btn-xs rounded-0 btn-primary">EXPORT</a>
-              <a href="{{ route('member.create') }}" class="btn btn-xs rounded-0 btn-warning">CREATE</a>
-            </div>
+                      <a href="{{ route('member.export','member') }}" class="btn btn-xs rounded-0 btn-primary">EXPORT</a>
+                      <a href="{{ route('member.create') }}" class="btn btn-xs rounded-0 btn-warning">CREATE</a>
+                    </div>
             <div class="card">
+              <div class="card-header">
+                    <form method="GET" class="row">
+                      <div class="col-sm-2">
+                        <select name="filter" id="filter" class="form-control">
+                          <option value="1">Berdasarkan RFID</option>
+                          <option value="2">Berdasarkan Nama</option>
+                          <option value="3">Berdasarkan No Kend / No Pol</option>
+                        </select>
+                      </div>
+                      <div class="col-sm-4">
+                        <input type="text" id="q" name="q" class="form-control" placeholder="Pencarian...">
+                      </div>
+                      <div class="col-sm-2">
+                        <button type="submit" class="btn btn-sm rounded-0 btn-secondary">Submit</button>
+                      </div>
+                    </form>
+                </div>
               <div class="card-body p-0 height-equal">
                 <div class="table-responsive">
                   <table class="table table-sm">
@@ -38,9 +55,11 @@
                           <th>RFID</th>
                           <th>Nama</th>
                           <th>Kendaraan</th>
+                          <th>No Polisi</th>
                           <th>Jenis Member</th>
-                          <th width="1%">Status</th>
-                          <th width="1%"></th>
+                          <th width="1px">Status</th>
+                          <th width="1px"></th>
+                          <th width="1px"></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -57,9 +76,11 @@
                           <td> {{ $rows->rfid }}</td>
                           <td>{{ $rows->nama }}</td>
                           <td>{{ $rows->kendaraan->nama_kendaraan }}</td>
+                          <td>{{ $rows->no_kend }}</td>
                           <td>{{ $rows->jenis_member }}</td>
                           <td><span class="badge badge-{{ $status[$rows->status] }}">{{ $rows->status }}</span></td>
-                          <td><a class="btn btn-xs btn-primary" href="{{ route('member.show', $rows->rfid) }}">Show</a></td>
+                          <td><a class="btn btn-xs btn-primary" href="{{ route('member.show', $rows->rfid) }}">Tampilkan Lebih detail</a></td>
+                          <td><a class="btn rounded-0 btn-xs btn-warning" href="{{ route('member.topup_create', $rows->rfid) }}">Form Top Up</a></td>
                         </tr>
                       @endforeach
                     </tbody>
@@ -76,6 +97,10 @@
 	@push('scripts')
     <script src="{{ asset('assets/js/bootstrap/popper.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap/bootstrap.min.js') }}"></script>
+    <script>
+      $("#q").val("{{ request()->q; }}");
+      $("#filter").val("{{ request()->filter; }}");
+    </script>
 	@endpush
 
 @endsection

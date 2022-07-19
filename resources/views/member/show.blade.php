@@ -10,7 +10,7 @@
 @section('content')
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
-			<h3>Data RFID: {{ $member->rfid }}</h3>
+			<h3><a class="btn btn-xs rounded-0 btn-danger" href="{{ route('member.index') }}">Kembali</a> Data RFID: {{ $member->rfid }}</h3>
 		@endslot
 		<li class="breadcrumb-item">Member Details</li>
 	@endcomponent
@@ -18,38 +18,39 @@
         <div class="row">   
           <div class="col-sm-12 col-xl-12 col-lg-12 col-md-12">
             <div class="card">
-               <div class="card-body p-0 height-equal">
-                <div class="table-responsive">
-                  <table class="table table-sm">
-                    <thead>
-                      <tr>
-                          <th>RFID</th>
-                          <th>Nama</th>
-                          <th>Kendaraan</th>
-                          <th>Jenis Member</th>
-                          <th width="1%">Status</th>
-                          <th width="1%"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $status = [
-                                'aktif' => 'success',
-                                'pasif' => 'danger',
-                                'blokir' => 'dark',
-                            ];
-                        @endphp
+               
+                <div class="card-body p-0 height-equal">
+                  <div class="table-responsive">
+                    <table class="table table-sm">
+                      <thead>
                         <tr>
-                          <td> {{ $member->rfid }}</td>
-                          <td>{{ $member->nama }}</td>
-                          <td>{{ $member->kendaraan->nama_kendaraan }}</td>
-                          <td>{{ $member->jenis_member }}</td>
-                          <td><span class="badge badge-{{ $status[$member->status] }}">{{ $member->status }}</span></td>
+                            <th>RFID</th>
+                            <th>Nama</th>
+                            <th>Kendaraan</th>
+                            <th>Jenis Member</th>
+                            <th width="1%">Status</th>
+                            <th width="1%"></th>
                         </tr>
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                          @php
+                              $status = [
+                                  'aktif' => 'success',
+                                  'pasif' => 'danger',
+                                  'blokir' => 'dark',
+                              ];
+                          @endphp
+                          <tr>
+                            <td> {{ $member->rfid }}</td>
+                            <td>{{ $member->nama }}</td>
+                            <td>{{ $member->kendaraan->nama_kendaraan }}</td>
+                            <td>{{ $member->jenis_member }}</td>
+                            <td><span class="badge badge-{{ $status[$member->status] }}">{{ $member->status }}</span></td>
+                          </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              </div>
             </div>
           </div>
           <div class="col-sm-12 col-xl-6 col-lg-6 col-md-6">

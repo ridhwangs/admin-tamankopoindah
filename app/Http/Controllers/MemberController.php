@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -27,10 +28,26 @@ class MemberController extends Controller
         $this->member = new Member();
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        if($request->filter == 1){
+           $where = [
+                ['rfid','LIKE','%'.$request->q.'%']
+           ];
+        }else if($request->filter == 2){
+            $where = [
+                ['nama','LIKE','%'.$request->q.'%']
+            ];
+        }else if($request->filter == 3){
+            $where = [
+                ['no_kend','LIKE','%'.$request->q.'%']
+            ];
+        }else{
+            $where = null;
+        }
+        
         $data = [
-            'member' => Member::with('kendaraan')->where('jenis_member', '!=', 'master')->orderBy('nama','asc')->paginate(15),
+            'member' => Member::with('kendaraan')->where('jenis_member', '!=', 'master')->where($where)->orderBy('nama','asc')->paginate(15)
         ];
 
         return view('member.index', $data);
@@ -67,9 +84,14 @@ class MemberController extends Controller
         return view('member.top_up', $data);
     }
 
-    public function topup_create(Request $request)
+    public function topup_create(Request $request, $id)
     {
-        return view('member.top_up_create');
+        $data = [
+            'rfid' => $id,
+            'data' => Member::where('rfid', $id)->first(),
+            'sum_hari_topup' => $this->member->member_transaksi()->where([['rfid','=', $id],['status','=','approve']])->sum('hari'),
+        ];
+        return view('member.top_up_create', $data);
     }
 
     /**
@@ -80,7 +102,65 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'rfid' => 'required|numeric',
+            'nama' => 'required|',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if($validator->fails()){
+            return redirect()->back()->withErrors($validator)->withInput($request->all);
+        }
+
+        $data = [
+            'rfid' => $request->rfid,
+            'nama' => $request->nama,
+            'alamat' => $request->alamat,
+            'tempat' => $request->tempat,
+            'tgl_lahir' => $request->tgl_lahir,
+            'email' => $request->email,
+            'no_hp' => $request->no_hp,
+            'jenis_identitas' => $request->jenis_identitas,
+            'no_identitas' => $request->no_identitas,
+            'kendaraan_id' => $request->kendaraan_id,
+            'jenis_member' => 'abonemen',
+            'no_kend' => $request->no_kend,
+            'merk' => $request->merk,
+            'warna' => $request->warna,
+            'keterangan' => $request->keterangan,
+            'tgl_awal' => date('Y-m-d'),
+            'created_at' => date('Y-m-d H:i:s'),
+        ];
+
+        Member::insert($data);
+        return redirect()->route('member.index')->with('message','Data berhasil di simpan');
+    }
+    
+    public function store_top_up(Request $request)
+    {
+        $rules = [
+            'rfid' => 'required|numeric',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if($validator->fails()){
+            return redirect()->back()->withErrors($validator)->withInput($request->all);
+        }
+
+        $data = [
+            'rfid' => $request->rfid,
+            'jumlah' => $request->jumlah,
+            'hari' => $request->hari,
+            'jenis' => 'topup',
+            'status' => 'open',
+            'created_by' => Auth::user()->email,
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+
+        $this->member->member_transaksi()->insert($data);
+        return redirect()->route('member.index')->with('message','Data berhasil di simpan, tinggal menunggu Approved');
     }
 
     /**
